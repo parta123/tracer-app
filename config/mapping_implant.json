@@ -1,0 +1,510 @@
+{
+  "version": 2,
+  "rows": [
+    {
+      "sprinter": "SITI FATIMAH",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_SATRIA BAJA HITAM",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_DANIL MULIA",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_FEREN OCKTAVIANA",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_YUSUF MAULANA",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_MOHAMMAD ISKAND",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_AGUS PUJIYONO",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_AHMAD FATAHILLAH",
+      "seller": "",
+      "implant": "ID IMPLAN KOSAMBI"
+    },
+    {
+      "sprinter": "IMPLAN_ABDUL ROJAK",
+      "seller": "",
+      "implant": "ID IMPLAN BANJAR WIJAYA"
+    },
+    {
+      "sprinter": "IMPLAN_AFAN HAKIM",
+      "seller": "",
+      "implant": "ID IMPLAN BANJAR WIJAYA"
+    },
+    {
+      "sprinter": "IMPLAN_AGUS CHANDANI",
+      "seller": "",
+      "implant": "ID IMPLAN BANJAR WIJAYA"
+    },
+    {
+      "sprinter": "DEWI",
+      "seller": "",
+      "implant": "ID IMPLAN BANJAR WIJAYA"
+    },
+    {
+      "sprinter": "IMPLAN_MOHAMAD ZAENAL HIDAYAT",
+      "seller": "",
+      "implant": "ID IMPLAN BANJAR WIJAYA"
+    },
+    {
+      "sprinter": "IMPLAN_MOHAMAD PEBRI SIDIK",
+      "seller": "",
+      "implant": "ID IMPLAN MDP PORIS"
+    },
+    {
+      "sprinter": "IMPLAN_NYI AYU NICKY ANGGR",
+      "seller": "",
+      "implant": "ID IMPLAN MDP CIBODAS"
+    },
+    {
+      "sprinter": "IMPLAN_REZA ADITYA DHARMA",
+      "seller": "",
+      "implant": "ID IMPLAN MDP CIBODAS"
+    },
+    {
+      "sprinter": "IMPLAN_GLADYS EVLIN",
+      "seller": "",
+      "implant": "ID IMPLAN MDP CIBODAS"
+    },
+    {
+      "sprinter": "IMPLAN_AFRI YANTI MAYANSARI",
+      "seller": "",
+      "implant": "ID IMPLAN LARANGAN"
+    },
+    {
+      "sprinter": "IMPLAN_FAHRULRAHMAN AHMAH DIOR",
+      "seller": "",
+      "implant": "ID IMPLAN LARANGAN"
+    },
+    {
+      "sprinter": "IMPLAN_ARIEF SETYA BUDIMAN",
+      "seller": "",
+      "implant": "ID MDP CILEDUG"
+    },
+    {
+      "sprinter": "IMPLAN_BENNY HERJONTA GIN",
+      "seller": "",
+      "implant": "ID DROPPER CUTIESS366"
+    },
+    {
+      "sprinter": "IMPLAN_MICHAEL FILO GINTING",
+      "seller": "",
+      "implant": "ID DROPPER CUTIESS366"
+    },
+    {
+      "sprinter": "IMPLAN_ISSER HAREL ERLANGGA",
+      "seller": "",
+      "implant": "ID DROPPER DUTA"
+    },
+    {
+      "sprinter": "IMPLAN_HAFIZD SAKTIANSYAH",
+      "seller": "",
+      "implant": "ID MDP SASMITA"
+    },
+    {
+      "sprinter": "",
+      "seller": "CILUPBAH CASE",
+      "implant": "CILUPBAH GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "CILUPBAH ID MALL",
+      "implant": "CILUPBAH GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "ICASE STORE",
+      "implant": "CILUPBAH GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "GOODIEBAG BAHAGIA SEKALI",
+      "implant": "TOTE BAG GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "SOUVENIRKU.INDONESIA",
+      "implant": "TOTE BAG GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "TAS BELANJA MODE",
+      "implant": "TOTE BAG GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "TAS GROSIR NUSANTARA",
+      "implant": "TOTE BAG GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "TOTEBAG LESTARI",
+      "implant": "TOTE BAG GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "OXYACTION INDONESIA",
+      "implant": "OXY ACTION GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "OXYACTION OFFICIAL ID",
+      "implant": "OXY ACTION GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "PACKING CORNER",
+      "implant": "PC & ZEN"
+    },
+    {
+      "sprinter": "",
+      "seller": "PERABOT VIRAL 88",
+      "implant": "PC & ZEN"
+    },
+    {
+      "sprinter": "",
+      "seller": "PRISKILA OFFICIAL STORE",
+      "implant": "PRISKILA GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "ECOTECH OFICIAL STORE",
+      "implant": "PRISKILA GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "QCY INDONESIA.",
+      "implant": "PRISKILA GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "ABIB.INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "BEAUTY OF JOSEON INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "BENTON INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "CLIO INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "D'ALBA INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "GOODAL INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "HARUHARU WONDER INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "HEIMISH INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "HOUSE OF HUR INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "JUMISO INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "LUNAMAKEUP",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "MARY&MAY INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "MEDICUBE",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "NUMBUZIN INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "PYUNKANG YUL INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "STYLE KOREAN INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "TIRTIR INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "TORRIDEN INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "VT COSMETICS INDONESIA",
+      "implant": "SKI GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "AMATERASUN",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "AMATERASUN FLAGSHIP STORE",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "BEAUTYHAUL",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "BEAUTYHAUL FLAGSHIP STORE",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "BEAUTYHAUL INDONESIA",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "HINT FRAGRANCE",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "SOMETHINC",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "SOMETHINC INDONESIA",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "SOMETHINC MAKEUP OFFICIAL",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "SOMETHINC OFFICIAL",
+      "implant": "GROUP SOMETHINC"
+    },
+    {
+      "sprinter": "",
+      "seller": "AGSSPIRE",
+      "implant": "TROPIFOOT SANDALS GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "COCOSOUL KICKS",
+      "implant": "TROPIFOOT SANDALS GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "TROPIFOOT",
+      "implant": "TROPIFOOT SANDALS GROUP"
+    },
+    {
+      "sprinter": "",
+      "seller": "JURAGAN KECE STORE",
+      "implant": "KLIK BELI"
+    },
+    {
+      "sprinter": "",
+      "seller": "SEHAT SEJAHTERA MAKMUR",
+      "implant": "KLIK BELI"
+    },
+    {
+      "sprinter": "",
+      "seller": "KLIK BELI MART",
+      "implant": "KLIK BELI"
+    },
+    {
+      "sprinter": "",
+      "seller": "HEALTH AND BEAUTY SOLUTION",
+      "implant": "KLIK BELI"
+    },
+    {
+      "sprinter": "",
+      "seller": "GLOBALLYGOODS",
+      "implant": "KLIK BELI"
+    },
+    {
+      "sprinter": "",
+      "seller": "NO BRAND SHOP",
+      "implant": "KLIK BELI"
+    },
+    {
+      "sprinter": "",
+      "seller": "HUGO HOUSEWARE",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "LIVIRO.ID",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "GOLDII INDONESIA",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "JH MART INDONESIA",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "ECONEST INDONESIA",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "HOMYNEST INDONESIA",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "DUNIA TENDA",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "RUMAKU.ID",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "HUGO HOUSEWARE JAKARTA",
+      "implant": "HUGO"
+    },
+    {
+      "sprinter": "",
+      "seller": "ARSYPARTSTORE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "ZEAPARTSTORE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "HANAMOTORPARTS",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "NORTHSIDER COFFEE SHOP",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "QHEPARTSTORE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "MOTOPART GARAGE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "ERFAPARTSTORE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "DUTABERKAHPARTSTORE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "SUBUR BAUT ONLINE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "FOX MOTOR PARTS",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "NORTHSIDER COFFEE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "ELPARTSTORE",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "DUTAGROSIRPARTMOTOR",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "BATSRACING88",
+      "implant": "ARSYPART"
+    },
+    {
+      "sprinter": "",
+      "seller": "IBM SPAREPARTS",
+      "implant": "ARSYPART"
+    }
+  ]
+}

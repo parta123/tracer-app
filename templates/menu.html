@@ -1,0 +1,4144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TRACER</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:
+		#fbf7f7
+        url("/static/img/menu/truck.png")
+        right center
+        no-repeat;
+
+    background-size:
+    clamp(
+        1210px,
+        75vw,
+        1800px
+    );	
+
+    min-height:100vh;
+
+    color:#111;
+
+    padding:24px;
+
+    position:relative;
+	
+	display:flex;
+
+    flex-direction:column;
+
+}
+
+
+/* TOPBAR */
+.topbar{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding-bottom:12px;
+
+    border-bottom:
+        1px solid #ececec;
+
+}
+
+/* LOGO */
+.logo{
+
+    font-size:44px;
+
+    font-weight:600;
+
+    letter-spacing:-5px;
+
+    line-height:1;
+
+}
+
+.logo-black{
+    color:#111;
+}
+
+.logo-red{
+    color:#f20d2f;
+}
+
+/* RIGHT */
+.top-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+/* ICON BUTTON */
+.icon-btn{
+
+    width:53px;
+    height:53px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    position:relative;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.05);
+
+    transition:.2s;
+
+}
+
+.icon-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.icon-btn img{
+
+    width:23px;
+    height:23px;
+
+    object-fit:contain;
+
+}
+
+/* BADGE */
+.notif{
+
+    position:absolute;
+
+    top:10px;
+    right:9px;
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    background:#ff002f;
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+/* PROFILE */
+.profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:9px 18px;
+
+    min-width:160px;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.05);
+
+    cursor:pointer;
+
+    position:relative;
+
+}
+
+.profile-avatar{
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    background:#efefef;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.profile-avatar img{
+
+    width:23px;
+    height:23px;
+
+    object-fit:contain;
+
+}
+
+.profile-name{
+
+    font-size:13px;
+
+    font-weight:500;
+
+    margin-bottom:4px;
+
+}
+
+.profile-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#2dbd34;
+
+    font-size:10px;
+
+    font-weight:400;
+
+}
+
+.profile-status::before{
+
+    content:"";
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#2dbd34;
+
+}
+
+.profile-status.offline{
+
+    color:#ff2d55;
+
+}
+
+.profile-status.offline::before{
+
+    background:#ff2d55;
+
+}
+
+/* HERO */
+.hero{
+
+    position:relative;
+
+    min-height:clamp(120px,14vh,210px);
+
+    padding-top:clamp(26px,3.5vh,56px);
+
+    margin-bottom:clamp(24px,3.4vh,48px);
+
+}
+
+
+
+/* TEXT */
+.hero-content{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.hero-title{
+
+    font-size:38px;
+
+    font-weight:600;
+
+    line-height:1;
+
+    margin-bottom:16px;
+
+}
+
+.hero-title span{
+
+    color:#f20d2f;
+
+}
+
+.hero-sub{
+
+    font-size:15px;
+
+    color:#555;
+
+    line-height:1.5;
+
+    margin-bottom:clamp(16px,2.2vh,28px);
+
+}
+
+/* META */
+.hero-meta{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:24px;
+	
+
+
+}
+
+.meta-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:14px;
+
+    color:#555;
+	
+
+
+}
+
+.meta-item img{
+
+    width:22px;
+    height:22px;
+
+    object-fit:contain;
+
+}
+
+.meta-divider{
+
+    width:1px;
+    height:36px;
+
+    background:#e3e3e3;
+
+}
+
+/* MENU */
+.menu-grid{
+
+	align-items:stretch;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap:clamp(16px,1.5vw,34px);
+
+    margin-bottom:18px;
+
+}
+
+/* CARD */
+.menu-card{
+
+    background:white;
+
+    border-radius:34px;
+
+    min-height:clamp(
+        320px,
+        38vh,
+        500px
+    );
+
+    padding:
+        clamp(24px,3vh,46px)
+        clamp(18px,2vw,34px);
+
+    box-shadow:
+        0 8px 28px rgba(0,0,0,.04);
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+    transition:.2s;
+
+    text-decoration:none;
+
+    color:#111;
+
+}
+
+.menu-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+/* ICON */
+.menu-icon{
+
+    width:clamp(
+        72px,
+        6vw,
+        120px
+    );
+
+    height:clamp(
+        72px,
+        6vw,
+        120px
+    );
+
+    border-radius:32px;
+
+    background:#fff2f4;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-bottom:clamp(18px,2.4vh,30px);
+
+}
+
+.menu-icon img{
+
+    width:clamp(
+        48px,
+        5vw,
+        96px
+    );
+
+    height:clamp(
+        48px,
+        5vw,
+        96px
+    );
+    object-fit:contain;
+
+}
+
+/* TITLE */
+.menu-title{
+
+    font-size:clamp(
+        16px,
+        1.2vw,
+        22px
+    );
+
+    font-weight:600;
+
+    margin-bottom:clamp(10px,1.6vh,16px);
+
+}
+
+/* DESC */
+.menu-desc{
+
+    font-size:clamp(
+        12px,
+        .9vw,
+        16px
+    );
+
+
+    color:#666;
+
+    line-height:1;
+
+}
+
+/* ARROW */
+.arrow{
+
+    margin-top:auto;
+
+    width:60px;
+    height:60px;
+
+    border-radius:50%;
+
+    background:#fff1f3;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.arrow img{
+
+    width:35px;
+    height:35px;
+
+    object-fit:contain;
+
+}
+
+/* STATUS */
+.status-wrap{
+
+    background:white;
+
+    border-radius:30px;
+
+    padding:26px 34px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:20px;
+
+    box-shadow:
+        0 8px 28px rgba(0,0,0,.04);
+
+}
+
+/* STATUS CARD */
+.status-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+/* ICON */
+.status-icon{
+
+    width:74px;
+    height:74px;
+
+    border-radius:26px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.status-red{
+    background:#ff1236;
+}
+
+.status-orange{
+    background:#fff1df;
+}
+
+.status-green{
+    background:#49c84f;
+}
+
+.status-icon img{
+
+    width:40px;
+    height:40px;
+
+    object-fit:contain;
+
+}
+
+/* TEXT */
+.status-label{
+
+    font-size:16px;
+
+    color:#777;
+
+    margin-bottom:8px;
+
+}
+
+.status-value{
+
+    font-size:20px;
+
+    font-weight:400;
+
+    margin-bottom:6px;
+
+}
+
+.status-sub{
+
+    font-size:12px;
+
+    color:#666;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    margin-top:clamp(10px,1.6vh,22px);
+
+    color:#aaa;
+
+    font-size:13px;
+
+}
+
+
+
+
+
+#profileDropdown{
+
+    position:absolute;
+
+    top:93px;
+    right:20px;
+
+    width:220px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:18px;
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.08);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transform:
+        translateY(-10px);
+
+    transition:.2s;
+
+    z-index:99999;
+
+}
+
+/* LOGIN OVERLAY */
+
+#loginOverlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    pointer-events:none;
+
+}
+
+/* BACKDROP */
+
+#loginBackdrop{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.18);
+
+    opacity:0;
+
+    transition:.2s;
+
+}
+
+/* PANEL */
+
+#loginPanel{
+
+    position:absolute;
+
+    top:92px;
+    right:24px;
+
+    width:320px;
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:24px;
+
+    box-shadow:
+        0 14px 40px rgba(0,0,0,.08);
+
+    transform:
+        translateY(-10px);
+
+    opacity:0;
+
+    transition:.22s;
+
+}
+
+/* ACTIVE */
+
+#loginOverlay.active{
+
+    pointer-events:auto;
+
+}
+
+#loginOverlay.active #loginBackdrop{
+
+    opacity:1;
+
+}
+
+#loginOverlay.active #loginPanel{
+
+    transform:
+        translateY(0);
+
+    opacity:1;
+
+}
+
+/* TITLE */
+
+.login-title{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+}
+
+/* INPUT */
+
+#loginPanel input{
+
+    width:100%;
+
+    height:52px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:14px;
+
+    background:#f5f5f5;
+
+    padding:0 16px;
+
+    font-size:14px;
+
+    margin-bottom:14px;
+
+}
+
+/* BUTTON */
+
+#loginPanel button{
+
+    width:100%;
+
+    height:52px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#f20d2f;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+/* PROFILE */
+
+.profile{
+
+    cursor:pointer;
+
+    position:relative;
+
+}
+
+/* DROPDOWN */
+
+
+
+/* ACTIVE */
+
+#profileDropdown.active{
+
+    opacity:1;
+
+    pointer-events:auto;
+
+    transform:
+        translateY(0);
+
+}
+
+/* NAME */
+
+.dropdown-name{
+
+    font-size:16px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+
+}
+
+/* STATUS */
+
+.dropdown-status{
+
+    color:#22c55e;
+
+    font-size:13px;
+
+    margin-bottom:18px;
+
+}
+
+/* BUTTON */
+
+.dropdown-actions{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+#profileDropdown button{
+
+    width:100%;
+
+    height:46px;
+
+    border:1px solid transparent;
+
+    border-radius:14px;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    position:relative;
+
+    z-index:999999;
+
+}
+
+.dropdown-clockout{
+
+    background:#f20d2f;
+
+    color:white;
+
+}
+
+.dropdown-logout{
+
+    background:white;
+
+    color:#111827;
+
+    border-color:#d0d5dd !important;
+
+}
+
+.login-subtitle{
+
+    font-size:13px;
+
+    color:#666;
+
+    line-height:1.45;
+
+    margin-top:-10px;
+
+    margin-bottom:16px;
+
+}
+
+.credential-change-form{
+
+    display:none;
+
+}
+
+#loginPanel.force-change .login-form{
+
+    display:none;
+
+}
+
+#loginPanel.force-change .credential-change-form{
+
+    display:block;
+
+}
+
+#accessDeniedOverlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:10000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(17,24,39,.28);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:
+        opacity .18s ease,
+        visibility 0s linear .18s;
+
+}
+
+#accessDeniedOverlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+    transition:
+        opacity .18s ease,
+        visibility 0s;
+
+}
+
+.access-denied-card{
+
+    width:min(360px, calc(100vw - 40px));
+
+    padding:24px 22px;
+
+    border-radius:20px;
+
+    background:#fff;
+
+    box-shadow:0 20px 55px rgba(15,23,42,.18);
+
+    text-align:center;
+
+    transform:translateY(8px) scale(.98);
+
+    transition:transform .2s ease;
+
+}
+
+#accessDeniedOverlay.active .access-denied-card{
+
+    transform:translateY(0) scale(1);
+
+}
+
+.access-denied-icon{
+
+    width:46px;
+
+    height:46px;
+
+    margin:0 auto 12px;
+
+    border-radius:14px;
+
+    background:#fff1f2;
+
+    color:#f20d2f;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:24px;
+
+    font-weight:800;
+
+}
+
+.access-denied-title{
+
+    font-size:20px;
+
+    font-weight:800;
+
+    color:#111827;
+
+    margin-bottom:6px;
+
+}
+
+.access-denied-text{
+
+    font-size:13px;
+
+    color:#6b7280;
+
+}
+
+/* LOCK */
+
+.menu-card.locked{
+
+    opacity:.75;
+
+    filter:grayscale(1);
+
+}
+
+.menu-card.locked .menu-icon{
+
+    background:#f2f2f2;
+
+}
+
+.menu-card.locked .arrow,
+.menu-card.locked .scan-expand,
+.menu-card.locked .build-expand{
+
+    background:#ededed;
+
+}
+
+.menu-card.locked .menu-title{
+
+    color:#777;
+
+}
+
+.menu-card.locked .menu-desc{
+
+    color:#999;
+
+}
+
+/* ARROW */
+
+.menu-arrow{
+
+    transition:.25s;
+
+}
+
+.arrow-icon{
+
+    width:26px;
+    height:26px;
+
+    object-fit:contain;
+
+    transition:
+        transform .45s cubic-bezier(.22,1,.36,1),
+        opacity .35s ease,
+        filter .35s ease;
+
+    will-change:
+        transform,
+        opacity;
+
+}
+
+/* LOCK */
+
+.arrow-icon.lock-state{
+
+    opacity:.9;
+
+    transform:scale(1.18);
+
+}
+
+/* UNLOCK */
+
+.arrow-icon.unlock-state{
+
+    transform:
+        scale(1.18)
+        rotate(-8deg);
+
+    opacity:1;
+
+    filter:
+        drop-shadow(
+            0 6px 12px rgba(34,197,94,.35)
+        );
+
+}
+
+/* FINAL ARROW */
+
+.arrow-icon.arrow-state{
+
+    transform:
+        scale(1);
+
+    opacity:1;
+
+}
+
+/* FADE OUT */
+
+.arrow-icon.fade-out{
+
+    opacity:0;
+
+    transform:
+        scale(.7);
+
+}
+
+/* UNLOCK */
+
+.arrow-icon.unlocking{
+
+    transform:
+        scale(1.25);
+
+    opacity:.4;
+
+}
+
+.setting-expand{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.setting-btn{
+
+    width:53px;
+
+    height:53px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.05);
+
+    transition:
+        width .28s cubic-bezier(.22,1,.36,1);
+
+    padding:0 15px;
+
+}
+
+body.logged-in .setting-expand:hover .setting-btn{
+    width:420px;
+}
+
+.setting-panel{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    white-space:nowrap;
+
+    width:0;
+
+    opacity:0;
+
+    overflow:hidden;
+
+    transition:
+        opacity .15s ease,
+        width .28s cubic-bezier(.22,1,.36,1);
+
+}
+
+body.logged-in .setting-expand:hover .setting-panel{
+    width:355px;
+    opacity:1;
+}
+
+[data-superman-only]{
+    display:none;
+}
+
+body.logged-in .setting-expand.open .setting-btn{
+    width:420px;
+}
+
+body.logged-in .setting-expand.open .setting-panel{
+    width:355px;
+    opacity:1;
+}
+
+.setting-panel a{
+
+    text-decoration:none;
+
+    color:#333;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    transition:
+        color .15s ease;
+
+}
+
+.setting-panel a:hover{
+
+    color:#f20d2f;
+
+}
+
+.setting-panel span{
+
+    color:#cfcfcf;
+
+}
+
+.setting-btn img{
+
+    width:23px;
+
+    height:23px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+
+}
+
+/* =========================
+   SCAN EXPAND
+========================= */
+
+.scan-expand{
+
+    margin-top:auto;
+
+    width:60px;
+    height:60px;
+
+    border-radius:50%;
+
+    background:#fff1f3;
+
+    position:relative;
+
+    overflow:hidden;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    transition:
+        width .35s cubic-bezier(.22,1,.36,1),
+        height .25s ease,
+        border-radius .25s ease;
+
+    cursor:pointer;
+
+}
+
+.scan-expand.active{
+
+    width:250px;
+    height:54px;
+    border-radius:12px;
+
+}
+
+.scan-circle{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:60px;
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    z-index:2;
+
+}
+
+.scan-options{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:0 24px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.2s;
+
+}
+
+.scan-expand.active .scan-options{
+
+    opacity:1;
+
+    pointer-events:auto;
+
+}
+
+.scan-options a{
+
+    text-decoration:none;
+
+    color:#333;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.scan-options a:hover{
+
+    color:#f20d2f;
+
+}
+
+.scan-options span{
+
+    color:#cfcfcf;
+
+}
+
+.scan-circle{
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+
+}
+
+.scan-circle .arrow-icon{
+        width:35px !important;
+        height:35px !important;
+    }
+
+.scan-expand.active .scan-circle{
+
+    opacity:0;
+
+    transform:
+        translate(-50%,-50%)
+        scale(.7);
+
+}
+
+.menu-card.building{
+
+		pointer-events:none;
+
+		opacity:.85;
+
+	}
+	
+	
+.build-expand{
+
+    margin-top:auto;
+
+    width:60px;
+    height:60px;
+
+    border-radius:999px;
+
+    background:#fff1f3;
+
+    position:relative;
+
+    overflow:hidden;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:
+        width .35s cubic-bezier(.22,1,.36,1);
+
+    cursor:pointer;
+
+}
+
+.build-expand.active{
+
+    width:260px;
+	height:70px;
+	border-radius:999px;
+
+}
+
+.build-icon{
+
+    width:60px;
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+}
+
+.build-icon img{
+
+    width:28px;
+    height:28px;
+
+    object-fit:contain;
+
+}
+
+.build-text{
+
+    color:#ef4444;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+    white-space:nowrap;
+
+    opacity:0;
+
+    width:0;
+
+    overflow:hidden;
+
+    transition:.25s;
+
+}
+
+.build-expand.active .build-text{
+
+    opacity:1;
+
+    width:auto;
+
+    padding-right:20px;
+
+}
+
+@media(min-width:501px) and (max-height:820px){
+
+    body{
+        padding:18px 24px;
+    }
+
+    .topbar{
+        padding-bottom:8px;
+    }
+
+    .hero{
+        min-height:108px;
+        padding-top:26px;
+        margin-bottom:22px;
+    }
+
+    .hero-title{
+        font-size:34px;
+        margin-bottom:10px;
+    }
+
+    .hero-sub{
+        margin-bottom:16px;
+    }
+
+    .hero-meta{
+        gap:18px;
+    }
+
+    .menu-grid{
+        gap:18px;
+        margin-bottom:12px;
+    }
+
+    .menu-card{
+        min-height:320px;
+        border-radius:28px;
+        padding:22px 22px;
+    }
+
+    .menu-icon{
+        width:76px;
+        height:76px;
+        border-radius:22px;
+        margin-bottom:20px;
+    }
+
+    .menu-icon img{
+        width:54px;
+        height:54px;
+    }
+
+    .menu-title{
+        font-size:16px;
+        margin-bottom:10px;
+    }
+
+    .menu-desc{
+        font-size:12px;
+        line-height:1.35;
+    }
+
+    .arrow{
+        width:54px;
+        height:54px;
+    }
+
+    .arrow-icon{
+        width:26px !important;
+        height:26px !important;
+    }
+
+    .scan-expand{
+        width:54px;
+        height:54px;
+    }
+
+    .scan-circle{
+        width:54px;
+        height:54px;
+    }
+
+    .scan-circle .arrow-icon{
+        width:26px !important;
+        height:26px !important;
+    }
+
+}
+
+/* SMARTPHONE */
+@media(max-width:500px){
+
+    body.logged-in .setting-expand.open .setting-btn{
+        width:min(420px, calc(100vw - 28px));
+    }
+
+    body.logged-in .setting-expand.open .setting-panel{
+        width:calc(100% - 38px);
+        gap:8px;
+        justify-content:space-evenly;
+    }
+
+    .setting-panel a{
+        font-size:12px;
+    }
+
+    body{
+
+        padding:14px;
+
+        background-position:
+            center top;
+
+    }
+
+    /* TOPBAR */
+
+    .topbar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:16px;
+
+    }
+
+    .top-right{
+
+        width:100%;
+
+        justify-content:space-between;
+
+        gap:10px;
+
+    }
+
+    /* LOGO */
+
+    .logo{
+
+        font-size:34px;
+
+        letter-spacing:-3px;
+
+    }
+
+    /* BUTTON */
+
+    .icon-btn{
+
+        width:48px;
+        height:48px;
+
+        border-radius:14px;
+
+    }
+
+    .icon-btn img{
+
+        width:20px;
+        height:20px;
+
+    }
+
+    /* PROFILE */
+
+    .profile{
+
+        flex:1;
+
+        min-width:auto;
+
+        padding:10px 14px;
+
+        gap:10px;
+
+    }
+
+    .profile-avatar{
+
+        width:34px;
+        height:34px;
+
+    }
+
+    .profile-avatar img{
+
+        width:18px;
+        height:18px;
+
+    }
+
+    .profile-name{
+
+        font-size:12px;
+
+    }
+
+    .profile-status{
+
+        font-size:9px;
+
+    }
+
+    /* HERO */
+
+    .hero{
+
+        min-height:auto;
+
+        padding-top:26px;
+
+        margin-bottom:22px;
+
+    }
+
+    .hero-title{
+
+        font-size:32px;
+
+        line-height:1.15;
+
+        margin-bottom:14px;
+
+    }
+
+    .hero-sub{
+
+        font-size:14px;
+
+        line-height:1.5;
+
+        margin-bottom:22px;
+
+    }
+
+    /* META */
+
+    .hero-meta{
+
+        flex-wrap:wrap;
+
+        gap:12px;
+
+    }
+
+    .meta-item{
+
+        font-size:13px;
+
+        gap:8px;
+
+    }
+
+    .meta-item img{
+
+        width:18px;
+        height:18px;
+
+    }
+
+    .meta-divider{
+
+        display:none;
+
+    }
+
+    /* GRID */
+
+    .menu-grid{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:14px;
+
+        margin-bottom:18px;
+
+    }
+
+    /* ICON */
+
+    .menu-icon{
+
+        width:76px;
+        height:76px;
+
+        border-radius:22px;
+
+        margin-bottom:20px;
+
+    }
+
+    .menu-icon img{
+
+        width:56px;
+        height:56px;
+
+    }
+
+    /* TITLE */
+
+    .menu-title{
+
+        font-size:16px;
+
+        margin-bottom:12px;
+
+        line-height:1.2;
+
+    }
+
+    /* DESC */
+
+    .menu-desc{
+
+        font-size:12px;
+
+        line-height:1.5;
+
+    }
+
+    /* ARROW */
+
+    .arrow{
+
+        width:46px;
+        height:46px;
+
+    }
+
+    .arrow-icon{
+
+        width:22px !important;
+        height:22px !important;
+
+    }
+
+    /* STATUS */
+
+    .status-wrap{
+
+        grid-template-columns:1fr;
+
+        border-radius:24px;
+
+        padding:18px;
+
+        gap:18px;
+
+    }
+
+    .status-card{
+
+        gap:14px;
+
+    }
+
+    .status-icon{
+
+        width:56px;
+        height:56px;
+
+        border-radius:18px;
+
+    }
+
+    .status-icon img{
+
+        width:28px;
+        height:28px;
+
+    }
+
+    .status-label{
+
+        font-size:13px;
+
+    }
+
+    .status-value{
+
+        font-size:18px;
+
+    }
+
+    .status-sub{
+
+        font-size:11px;
+
+    }
+
+    /* LOGIN PANEL */
+
+    #loginPanel{
+
+        width:calc(100% - 28px);
+
+        right:14px;
+
+        top:84px;
+
+        border-radius:20px;
+
+        padding:20px;
+
+    }
+
+    /* DROPDOWN */
+
+    #profileDropdown{
+
+        width:calc(100% - 28px);
+
+        right:14px;
+
+        top:130px;
+
+    }
+	
+	/* =========================
+	   MOBILE CARD
+	========================= */
+
+	.menu-grid{
+
+		grid-template-columns:1fr;
+
+		gap:16px;
+
+	}
+
+	/* CARD */
+
+	.menu-card{
+
+		min-height:auto;
+
+		border-radius:24px;
+
+		padding:16px;
+		
+		position:relative;
+
+		display:flex;
+
+		flex-direction:row;
+
+		align-items:center;
+
+		gap:14px;
+
+		text-align:left;
+
+	}
+
+	.menu-info{
+
+		flex:1;
+
+		min-width:0;
+
+	}
+
+	.menu-title{
+
+		font-size:18px;
+
+		margin-bottom:4px;
+
+	}
+
+	.menu-desc{
+
+		display:block;
+
+		font-size:12px;
+
+		color:#777;
+
+		line-height:1.4;
+
+	}
+
+	.arrow{
+
+		margin-left:auto;
+
+		width:44px;
+		height:44px;
+
+		min-width:44px;
+	}
+
+	/* ICON */
+
+	.menu-icon{
+
+		width:72px;
+		height:72px;
+
+		min-width:72px;
+
+		border-radius:22px;
+
+		margin-bottom:0;
+
+	}
+
+	.menu-icon img{
+
+		width:52px;
+		height:52px;
+
+	}
+
+	/* INFO */
+
+	.menu-info{
+
+		flex:1;
+
+	}
+
+	/* TITLE */
+
+	.menu-title{
+
+		font-size:22px;
+
+		margin-bottom:8px;
+
+		line-height:1.1;
+
+	}
+
+	/* DESC */
+
+	.menu-desc{
+
+		display:block;
+
+		font-size:13px;
+
+		color:#777;
+
+		margin-top:6px;
+
+		line-height:1.4;
+
+	}
+	/* ARROW */
+
+	.arrow{
+
+		width:50px;
+		height:50px;
+
+		min-width:50px;
+
+		margin-left:auto;
+
+		margin-top:0;
+
+		background:#fff1f3;
+
+	}
+
+	.arrow-icon{
+
+		width:22px !important;
+		height:22px !important;
+
+	}
+	
+	.scan-expand{
+
+		position:absolute;
+
+		right:16px;
+
+		top:50%;
+
+		transform:translateY(-50%);
+
+		z-index:50;
+		
+		width:50px;
+		height:50px;
+
+	}
+	
+	.scan-circle .arrow-icon{
+        width:22px !important;
+        height:22px !important;
+    }
+	
+	.scan-expand.active{
+
+		width:250px;
+		
+		height:54px;
+		
+		justify-content:center;
+		
+		border-radius:12px;
+
+	}
+
+	.scan-expand.active .scan-circle{
+
+		display:none;
+
+	}
+	
+	.menu-card.scan-open .menu-info{
+
+		opacity:0;
+
+		visibility:hidden;
+
+	}
+	
+	.menu-card.scan-open:hover{
+
+		transform:none;
+
+	}
+	
+	.scan-options a{
+
+		font-size:19px;
+		font-weight:400;
+	}
+	
+	
+	.menu-card.building{
+
+		pointer-events:none;
+
+		opacity:.85;
+
+	}
+	
+	.build-expand{
+
+		position:absolute;
+
+		right:16px;
+
+		top:50%;
+
+		transform:translateY(-50%);
+
+		justify-content:flex-end;
+		
+		width:50px;
+        height:50px;
+		
+		display:flex;
+
+		align-items:center;
+
+		justify-content:center;
+
+	}
+
+	.build-expand.active{
+
+		width:285px;
+		border-radius:20px;
+		
+
+	}
+
+	.build-icon{
+
+		position:absolute;
+
+		right:0;
+
+		top:50%;
+
+		transform:translateY(-50%);
+
+		width:50px;
+
+		height:50px;
+
+		display:flex;
+
+		align-items:center;
+
+		justify-content:center;
+
+		z-index:2;
+
+	}
+
+	.build-text{
+
+		position:absolute;
+
+		right:90px;
+
+		text-align:right;
+
+		white-space:nowrap;
+
+		opacity:0;
+
+		width:0;
+
+		overflow:hidden;
+
+	}
+	
+	.build-expand.active .build-text{
+
+		opacity:1;
+
+		width:170px;
+		
+		font-size:13px;
+		
+		font-weight:400;		
+		
+
+	}
+	
+	.build-icon img{
+
+		width:18px;
+		height:18px;
+		
+		display:flex;
+
+		align-items:center;
+
+		justify-content:center;
+
+	}
+	
+	.footer{
+
+    text-align:center;
+
+    margin-top:auto;
+
+    color:#aaa;
+
+    font-size:13px;
+
+}
+	
+	
+	
+
+}
+
+/* SCANNER */
+@media(max-width:380px){
+
+    body{
+        padding:10px;
+    }
+
+    /* TOPBAR */
+
+    .top-right{
+        gap:6px;
+    }
+
+    .icon-btn{
+
+        width:42px;
+        height:42px;
+
+    }
+
+    .profile{
+
+        padding:8px 10px;
+
+        gap:8px;
+
+    }
+
+    .profile-avatar{
+
+        width:30px;
+        height:30px;
+
+    }
+
+    .profile-name{
+
+        font-size:11px;
+
+    }
+
+    .profile-status{
+
+        font-size:9px;
+
+    }
+
+    /* HERO */
+
+    .hero{
+
+        padding-top:20px;
+
+    }
+
+    .hero-title{
+
+        font-size:26px;
+
+    }
+
+    .hero-sub{
+
+        font-size:12px;
+
+    }
+
+    .meta-item{
+
+        font-size:11px;
+
+    }
+
+    /* CARD */
+
+    .menu-card{
+
+        padding:12px;
+
+        gap:10px;
+
+        border-radius:18px;
+
+    }
+
+    .menu-icon{
+
+        width:56px;
+        height:56px;
+
+        min-width:56px;
+
+        border-radius:16px;
+
+    }
+
+    .menu-icon img{
+
+        width:38px;
+        height:38px;
+
+    }
+
+    .menu-info{
+
+        flex:1;
+
+        min-width:0;
+
+    }
+
+    .menu-title{
+
+        font-size:15px;
+
+        margin-bottom:2px;
+
+        line-height:1.2;
+
+    }
+
+    .menu-desc{
+
+        display:block;
+
+        font-size:10px;
+
+        line-height:1.3;
+
+        color:#777;
+
+    }
+
+    .arrow{
+
+        width:38px;
+        height:38px;
+
+        min-width:38px;
+
+        margin-left:auto;
+
+    }
+
+    .arrow-icon{
+
+        width:16px !important;
+        height:16px !important;
+
+    }
+
+    /* LOGIN */
+
+    #loginPanel{
+
+        width:calc(100% - 20px);
+
+        right:10px;
+
+        top:74px;
+
+        padding:16px;
+
+    }
+
+    #profileDropdown{
+
+        width:calc(100% - 20px);
+
+        right:10px;
+
+        top:118px;
+
+    }
+	
+	.scan-expand{
+
+		position:absolute;
+
+		right:16px;
+
+		top:50%;
+
+		transform:translateY(-50%);
+
+		z-index:50;
+		
+		width:38px;
+		height:38px;
+
+	}
+	
+	.scan-circle .arrow-icon{
+        width:16px !important;
+        height:16px !important;
+    }
+	
+	.scan-expand.active{
+
+		width:206px;
+		
+		height:44px;
+		
+		justify-content:center;
+		
+		border-radius:10px;
+
+	}
+
+	.scan-expand.active .scan-circle{
+
+		display:none;
+
+	}
+	
+	.menu-card.scan-open .menu-info{
+
+		opacity:0;
+
+		visibility:hidden;
+
+	}
+	
+	.menu-card.scan-open:hover{
+
+		transform:none;
+
+	}
+	
+	.scan-options a{
+
+		font-size:14px;
+
+	}
+	
+	.menu-card.building{
+
+		pointer-events:none;
+
+		opacity:.85;
+
+	}
+	
+	.build-expand.active{
+
+		width:210px;
+		
+		border-radius:20px;
+		
+		height:55px;
+		
+
+	}
+
+	.build-expand.active .build-text{
+
+		opacity:1;
+
+		width:135px;
+
+		font-size:11px;
+
+	}
+	
+	.build-expand{
+
+        width:38px;
+        height:38px;
+		
+
+    }
+
+    .build-icon{
+
+		position:absolute;
+
+		right:0;
+
+		top:50%;
+
+		transform:translateY(-50%);
+
+		width:38px;
+
+		height:38px;
+
+		display:flex;
+
+		align-items:center;
+
+		justify-content:center;
+
+		z-index:2;
+
+	}
+	
+	.build-text{
+
+		color:#ef4444;
+
+		font-size:13px;
+
+		font-weight:700;
+
+		letter-spacing:.5px;
+
+		white-space:nowrap;
+
+		opacity:0;
+
+		width:0;
+
+		overflow:hidden;
+
+		transition:.25s;
+		
+		right:30px;
+
+	}
+	
+	.build-expand.active .build-text{
+
+		opacity:1;
+
+		width:auto;
+
+	
+
+	}
+	
+	
+	
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+
+<!-- TOPBAR -->
+    <div class="topbar">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <span class="logo-black">TRA</span><span class="logo-red">CER</span>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="top-right">
+
+            <!-- NOTIF -->
+            <button class="icon-btn">
+
+                <img src="/static/img/menu/bell.png">
+
+                <div class="notif">
+                    3
+                </div>
+
+            </button>
+
+            <!-- SETTING -->
+            <div class="setting-expand">
+
+                <button class="setting-btn" type="button" aria-expanded="false">
+
+					<div class="setting-panel">
+
+						<a href="/upload_har" data-superman-only="true">
+							Har
+						</a>
+
+						<span data-superman-only="true">|</span>
+
+						<a href="/server_management" data-superman-only="true">
+							Server
+						</a>
+
+						<span data-superman-only="true">|</span>
+
+						<a href="/account_management">
+							Akun
+						</a>
+
+						<span>|</span>
+
+						<a href="/scan_settings">
+							Scan
+						</a>
+
+						<span>|</span>
+
+						<a href="/mapping_implant">
+							Mapping
+						</a>
+
+					</div>
+
+					<img src="/static/img/menu/setting.png">
+
+				</button>
+
+			</div>
+
+            <!-- PROFILE -->
+			<div
+				class="profile"
+				id="profileBox"
+				onclick="openLogin()"
+			>
+
+				<div class="profile-avatar">
+
+					<img src="/static/img/menu/user.png">
+
+				</div>
+
+				<div>
+
+					<div
+						class="profile-name"
+						id="profileName"
+					>
+						LOGIN
+					</div>
+
+					<div
+						class="profile-status offline"
+						id="profileStatus"
+					>
+						Offline
+					</div>
+
+				</div>
+
+			</div>
+			
+			<!-- PROFILE DROPDOWN -->
+			<div id="profileDropdown">
+
+				<div class="dropdown-name"
+					 id="dropdownUsername">
+					superman
+				</div>
+
+				<div class="dropdown-status">
+					Online
+				</div>
+
+				<div class="dropdown-actions">
+
+					<button
+						class="dropdown-clockout"
+						onclick="clockOutFromMenu(event)"
+					>
+						Clock Out
+					</button>
+
+					<button
+						class="dropdown-logout"
+						onclick="logout()"
+					>
+						Logout
+					</button>
+
+				</div>
+
+			</div>
+
+        </div>
+
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+
+
+        <!-- CONTENT -->
+        <div class="hero-content">
+
+            <div class="hero-title">
+
+				Halo,
+				<span id="heroUsername">
+					User
+				</span>
+
+			</div>
+
+            <div class="hero-sub">
+                Selamat datang kembali. Pilih menu untuk memulai pekerjaan.
+            </div>
+
+            <div class="hero-meta">
+
+                <div class="meta-item">
+
+					<img src="/static/img/menu/calendar.png">
+
+					<span id="currentDate"></span>
+
+				</div>
+
+				<div class="meta-divider"></div>
+
+				<div class="meta-item">
+
+					<img src="/static/img/menu/clock.png">
+
+					<span id="currentTime"></span>
+
+				</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MENU -->
+    <div class="menu-grid">
+
+        <!-- DASHBOARD -->
+        <a
+			href="/dashboard"
+			class="menu-card protected-link"
+			data-permission="DASHBOARD_RETUR"
+		>
+
+            <div class="menu-icon">
+                <img src="/static/img/menu/dashboard.png">
+            </div>
+			
+			<div class="menu-info">
+
+				<div class="menu-title">
+					DASHBOARD RETUR
+				</div>
+
+				<div class="menu-desc">
+					Pantau aktivitas secara realtime
+				</div>
+				
+			</div>
+
+            <div class="arrow menu-arrow">
+                <img
+					class="arrow-icon"
+					src="/static/img/lock.png"
+				>
+            </div>
+
+        </a>
+		
+		<!-- ABSEN -->
+		<a
+			href="/attendance_dashboard"
+			class="menu-card protected-link"
+			data-permission="DASHBOARD_ABSEN"
+		>
+
+            <div class="menu-icon">
+                <img src="/static/img/menu/absen.png">
+            </div>
+			
+			<div class="menu-info">
+
+				<div class="menu-title">
+					DASHBOARD ABSEN
+				</div>
+
+				<div class="menu-desc">
+					Catat kehadiran lebih mudah
+				</div>
+			</div>
+
+            <div class="arrow menu-arrow">
+                <img
+					class="arrow-icon"
+					src="/static/img/lock.png"
+				>
+            </div>
+
+        </a>
+
+        <!-- SCAN -->
+		<div
+			class="menu-card protected-link"
+			data-permission="SCAN_SORTIR"
+		>
+
+			<div class="menu-icon">
+				<img src="/static/img/menu/scan.png">
+			</div>
+
+			<div class="menu-info">
+
+				<div class="menu-title">
+					SCAN SORTIR
+				</div>
+
+				<div class="menu-desc">
+					Scan & sortir paket dengan cepat
+				</div>
+
+			</div>
+
+			<div
+				id="scanExpand"
+				class="scan-expand"
+				onclick="toggleScanMenu(event)"
+			>
+
+				<div class="scan-options">
+
+					<a href="/scan?gun=1">
+						Scanner
+					</a>
+
+					<span>|</span>
+
+					<a href="/scan">
+						Smartphone
+					</a>
+
+				</div>
+
+				<div class="scan-circle">
+
+					<img
+						src="/static/img/menu/arrow.png"
+						class="arrow-icon"
+					>
+
+				</div>
+
+			</div>
+
+		</div>
+
+        <!-- TANDA TERIMA -->
+        <a
+			href="/retur_page"
+			class="menu-card protected-link"
+			data-permission="RETUR_PROCESS"
+		>
+
+            <div class="menu-icon">
+                <img src="/static/img/menu/receipt.png">
+            </div>
+			
+			<div class="menu-info">
+
+				<div class="menu-title">
+					TANDA TERIMA
+				</div>
+
+				<div class="menu-desc">
+					Kelola tanda terima retur
+				</div>
+				
+			</div>
+
+            <div class="arrow menu-arrow">
+                <img
+					class="arrow-icon"
+					src="/static/img/lock.png"
+				>
+            </div>
+
+        </a>
+
+        
+
+    </div>
+
+    
+
+    <!-- FOOTER -->
+    <div class="footer">
+        &copy; 2025 TRACER. All rights reserved.
+    </div>    
+
+
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay">
+
+    <!-- BACKDROP -->
+    <div
+        id="loginBackdrop"
+        onclick="closeLogin()"
+    ></div>
+
+    <!-- PANEL -->
+    <div id="loginPanel">
+
+        <div class="login-form">
+
+            <div class="login-title">
+                LOGIN
+            </div>
+
+            <input
+                type="text"
+                id="loginUsername"
+                placeholder="Username"
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Password"
+            >
+
+            <button onclick="doLogin()">
+                LOGIN
+            </button>
+
+        </div>
+
+        <div class="credential-change-form">
+
+            <div class="login-title">
+                Ganti Akun
+            </div>
+
+            <div class="login-subtitle">
+                Username dan password hanya bisa diubah sekali. Setelah submit, silakan login ulang dengan data baru.
+            </div>
+
+            <input
+                type="text"
+                id="newUsername"
+                placeholder="Username baru"
+            >
+
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="Password baru"
+            >
+
+            <input
+                type="password"
+                id="newPasswordConfirm"
+                placeholder="Ulangi password baru"
+            >
+
+            <button onclick="submitCredentialChange()">
+                SUBMIT
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div
+    id="accessDeniedOverlay"
+    onclick="closeAccessDenied()"
+>
+
+    <div
+        class="access-denied-card"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="access-denied-icon">
+            !
+        </div>
+
+        <div class="access-denied-title">
+            Akses dibatasi
+        </div>
+
+        <div class="access-denied-text">
+            Akun ini belum memiliki hak akses untuk menu tersebut.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+    const settingExpand = document.querySelector(".setting-expand");
+    const settingButton = settingExpand && settingExpand.querySelector(".setting-btn");
+
+    if(!settingExpand || !settingButton){
+        return;
+    }
+
+    settingButton.addEventListener("click", function(event){
+        if(event.target.closest("a")){
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        const isOpen = settingExpand.classList.toggle("open");
+        settingButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", function(event){
+        if(settingExpand.contains(event.target)){
+            return;
+        }
+
+        settingExpand.classList.remove("open");
+        settingButton.setAttribute("aria-expanded", "false");
+    });
+});
+
+function openLogin(){
+
+    const loggedIn =
+        localStorage.getItem("loggedIn");
+
+    if(loggedIn === "true"){
+
+        document
+            .getElementById("profileDropdown")
+            .classList.toggle("active");
+
+        return;
+
+    }
+
+    resetLoginPanel();
+
+    document
+        .getElementById("loginOverlay")
+        .classList.add("active");
+
+}
+
+function closeLogin(){
+
+    document
+        .getElementById("loginOverlay")
+        .classList.remove("active");
+
+    resetLoginPanel();
+
+}
+
+function resetLoginPanel(){
+
+    const panel =
+        document.getElementById("loginPanel");
+
+    panel.classList.remove(
+        "force-change"
+    );
+
+    [
+        "newUsername",
+        "newPassword",
+        "newPasswordConfirm"
+    ].forEach(id=>{
+
+        const input =
+            document.getElementById(id);
+
+        if(input){
+            input.value = "";
+        }
+
+    });
+
+}
+
+function showCredentialChange(username){
+
+    const panel =
+        document.getElementById("loginPanel");
+
+    document
+        .getElementById("newUsername")
+        .value = username || "";
+
+    document
+        .getElementById("newPassword")
+        .value = "";
+
+    document
+        .getElementById("newPasswordConfirm")
+        .value = "";
+
+    document
+        .getElementById("loginPassword")
+        .value = "";
+
+    panel.classList.add(
+        "force-change"
+    );
+
+    document
+        .getElementById("loginOverlay")
+        .classList.add("active");
+
+}
+
+function showAccessDenied(){
+
+    const overlay =
+        document.getElementById(
+            "accessDeniedOverlay"
+        );
+
+    overlay.classList.add(
+        "active"
+    );
+
+}
+
+function closeAccessDenied(){
+
+    document
+    .getElementById(
+        "accessDeniedOverlay"
+    )
+    .classList.remove(
+        "active"
+    );
+
+}
+
+function toggleDropdown(){
+
+    event.stopPropagation();
+
+    document
+        .getElementById("profileDropdown")
+        .classList.toggle("active");
+
+}
+
+function clockOutFromMenu(e){
+
+    if(e){
+
+        e.stopPropagation();
+
+    }
+
+    document
+        .getElementById("profileDropdown")
+        .classList.remove("active");
+
+    window.location.href =
+        "/attendance_clock_out";
+
+}
+
+function logout(){
+
+    const arrows =
+        document.querySelectorAll(
+            ".arrow-icon"
+        );
+
+    arrows.forEach(icon=>{
+
+        icon.classList.add(
+            "fade-out"
+        );
+
+        setTimeout(()=>{
+
+            icon.src =
+                "/static/img/unlock.png";
+
+            icon.classList.remove(
+                "fade-out"
+            );
+
+            icon.classList.add(
+                "unlock-state"
+            );
+
+            setTimeout(()=>{
+
+                icon.classList.add(
+                    "fade-out"
+                );
+
+                setTimeout(()=>{
+
+                    icon.src =
+                        "/static/img/lock.png";
+
+                    icon.classList.remove(
+                        "fade-out",
+                        "unlock-state"
+                    );
+
+                    icon.classList.add(
+                        "lock-state"
+                    );
+
+                },220);
+
+            },500);
+
+        },220);
+
+    });
+
+    setTimeout(()=>{
+
+        localStorage.clear();
+
+        window.location.href =
+            "/logout";
+
+    },1200);
+
+}
+
+async function doLogin(){
+
+    const username =
+        document
+        .getElementById("loginUsername")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value
+        .trim();
+
+    try{
+
+        const res = await fetch(
+            "/login",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    username,
+                    password
+
+                })
+            }
+        );
+
+        const data =
+            await res.json();
+
+        if(!data.success){
+
+            alert(
+                "Username atau password salah"
+            );
+
+            return;
+        }
+
+        if(data.force_change_credentials){
+
+            localStorage.removeItem(
+                "loggedIn"
+            );
+
+            localStorage.removeItem(
+                "username"
+            );
+
+            showCredentialChange(
+                username
+            );
+
+            return;
+
+        }
+
+        if(!data.need_attendance){
+
+			localStorage.setItem(
+				"loggedIn",
+				"true"
+			);
+
+			localStorage.setItem(
+				"username",
+				username
+			);
+
+			updateProfile();
+
+			closeLogin();
+
+		}else{
+
+			localStorage.removeItem(
+				"loggedIn"
+			);
+
+			localStorage.removeItem(
+				"username"
+			);
+
+		}
+
+		window.location.href =
+			data.redirect;
+
+    }catch(err){
+
+        console.error(err);
+
+        alert(
+            "Gagal koneksi ke server"
+        );
+
+    }
+
+}
+
+async function submitCredentialChange(){
+
+    const username =
+        document
+        .getElementById("newUsername")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("newPassword")
+        .value
+        .trim();
+
+    const passwordConfirm =
+        document
+        .getElementById("newPasswordConfirm")
+        .value
+        .trim();
+
+    if(!username || !password){
+
+        alert(
+            "Username dan password wajib diisi"
+        );
+
+        return;
+
+    }
+
+    if(password !== passwordConfirm){
+
+        alert(
+            "Konfirmasi password tidak sama"
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const res = await fetch(
+            "/force_change_credentials",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+                    username,
+                    password,
+                    password_confirm:passwordConfirm
+                })
+            }
+        );
+
+        const data =
+            await res.json();
+
+        if(!data.success){
+
+            alert(
+                data.error ||
+                "Gagal mengganti data akun"
+            );
+
+            return;
+
+        }
+
+        localStorage.removeItem(
+            "loggedIn"
+        );
+
+        localStorage.removeItem(
+            "username"
+        );
+
+        alert(
+            "Data akun berhasil diubah. Silakan login ulang."
+        );
+
+        window.location.href =
+            data.redirect || "/";
+
+    }catch(err){
+
+        console.error(err);
+
+        alert(
+            "Gagal koneksi ke server"
+        );
+
+    }
+
+}
+
+function updateProfile(){
+
+    const loggedIn =
+        localStorage.getItem("loggedIn");
+
+    const username =
+        localStorage.getItem("username");
+
+    const profileName =
+        document.getElementById("profileName");
+
+    const profileStatus =
+        document.getElementById("profileStatus");
+
+    const dropdownUsername =
+        document.getElementById("dropdownUsername");
+
+    const cards =
+        document.querySelectorAll(
+            ".protected-link"
+        );
+
+    const arrows =
+        document.querySelectorAll(
+            ".arrow-icon"
+        );
+
+    if(loggedIn === "true"){
+	
+		document.body.classList.add("logged-in");
+
+        profileName.innerText =
+            username;
+			
+		document.getElementById(
+			"heroUsername"
+		).innerText =
+			username;
+
+        dropdownUsername.innerText =
+            username;
+
+        profileStatus.innerText =
+            "Online";
+
+        profileStatus.classList.remove(
+            "offline"
+        );
+
+        cards.forEach(card=>{
+
+			if(
+				card.dataset.locked ===
+				"true"
+			){
+				return;
+			}
+
+			card.classList.remove(
+				"locked"
+			);
+
+			card.onclick = null;
+
+		});
+
+        arrows.forEach(icon=>{
+		
+			const card =
+				icon.closest(
+					"[data-permission]"
+				);
+
+			if(
+				card &&
+				card.classList.contains(
+					"locked"
+				)
+			){
+				return;
+			}
+
+			/* LOCK HILANG */
+
+			icon.classList.add(
+				"fade-out"
+			);
+
+			setTimeout(()=>{
+
+				/* UNLOCK */
+
+				icon.src =
+					"/static/img/unlock.png";
+
+				icon.classList.remove(
+					"fade-out",
+					"lock-state"
+				);
+
+				icon.classList.add(
+					"unlock-state"
+				);
+
+				/* HOLD */
+
+				setTimeout(()=>{
+
+					/* FADE UNLOCK */
+
+					icon.classList.add(
+						"fade-out"
+					);
+
+					setTimeout(()=>{
+
+						/* FINAL ARROW */
+
+						icon.src =
+							"/static/img/menu/arrow.png";
+
+						icon.classList.remove(
+							"fade-out",
+							"unlock-state"
+						);
+
+						icon.classList.add(
+							"arrow-state"
+						);
+
+					},220);
+
+				},1400);
+
+			},220);
+
+		});
+
+    }else{
+	
+		document.body.classList.remove("logged-in");
+
+        profileName.innerText =
+            "LOGIN";
+			
+		document.getElementById(
+			"heroUsername"
+		).innerText =
+			"User";
+
+        profileStatus.innerText =
+            "Offline";
+
+        profileStatus.classList.add(
+            "offline"
+        );
+
+        cards.forEach(card=>{
+
+            card.classList.add(
+                "locked"
+            );
+			
+			
+
+            const icon =
+                card.querySelector(
+                    ".arrow-icon"
+                );
+
+            if(icon){
+
+				icon.src =
+					"/static/img/lock.png";
+
+				icon.classList.remove(
+					"unlock-state",
+					"arrow-state",
+					"fade-out"
+				);
+
+				icon.classList.add(
+					"lock-state"
+				);
+
+			}
+
+            card.onclick = function(e){
+
+                e.preventDefault();
+
+                openLogin();
+
+            };
+
+        });
+
+    }
+
+}
+
+async function syncSession(){
+
+    try{
+
+        const res =
+            await fetch("/api/session");
+
+        const data =
+            await res.json();
+
+        if(data.logged_in){
+
+            localStorage.setItem(
+                "loggedIn",
+                "true"
+            );
+
+            localStorage.setItem(
+                "username",
+                data.username || ""
+            );
+
+        }else{
+
+            localStorage.removeItem(
+                "loggedIn"
+            );
+
+            localStorage.removeItem(
+                "username"
+            );
+
+        }
+
+        await loadPermissions();
+
+		updateProfile();
+
+    }catch(err){
+
+        console.error(err);
+
+        updateProfile();
+
+    }
+
+}
+
+syncSession();
+
+if(
+    new URLSearchParams(
+        window.location.search
+    )
+    .get("access_denied") === "1"
+){
+
+    showAccessDenied();
+
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
+
+}
+
+document.addEventListener(
+    "click",
+    function(e){
+
+        const dropdown =
+            document.getElementById(
+                "profileDropdown"
+            );
+
+        const profile =
+            document.getElementById(
+                "profileBox"
+            );
+
+        if(
+            !profile.contains(e.target)
+        ){
+
+            dropdown.classList.remove(
+                "active"
+            );
+
+        }
+
+    }
+);
+
+function updateDateTime(){
+
+    const now = new Date();
+
+    const days = [
+        "Minggu",
+        "Senin",
+        "Selasa",
+        "Rabu",
+        "Kamis",
+        "Jumat",
+        "Sabtu"
+    ];
+
+    const months = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+    ];
+
+    const day =
+        days[now.getDay()];
+
+    const date =
+        now.getDate();
+
+    const month =
+        months[now.getMonth()];
+
+    const year =
+        now.getFullYear();
+
+    document.getElementById(
+        "currentDate"
+    ).innerText =
+        `${day}, ${date} ${month} ${year}`;
+
+    document.getElementById(
+        "currentTime"
+    ).innerText =
+        now.toLocaleTimeString(
+            "id-ID",
+            {
+                hour12:false
+            }
+        );
+
+}
+
+updateDateTime();
+
+setInterval(
+    updateDateTime,
+    1000
+);
+
+/* =========================
+   SCAN MODE
+========================= */
+
+function toggleScanMenu(e){
+
+    e.stopPropagation();
+
+    const loggedIn =
+        localStorage.getItem(
+            "loggedIn"
+        );
+
+    if(
+        loggedIn !== "true"
+    ){
+
+        openLogin();
+
+        return;
+
+    }
+
+    const menu =
+        document.getElementById(
+            "scanExpand"
+        );
+
+    const card =
+        menu.closest(
+            ".menu-card"
+        );
+
+    menu.classList.toggle(
+        "active"
+    );
+
+    card.classList.toggle(
+        "scan-open"
+    );
+
+}
+
+document.addEventListener(
+    "click",
+    function(e){
+
+        const menu =
+            document.getElementById(
+                "scanExpand"
+            );
+
+        if(
+            menu &&
+            !menu.contains(e.target)
+        ){
+
+            menu.classList.remove(
+                "active"
+            );
+
+            menu
+                .closest(".menu-card")
+                ?.classList.remove(
+                    "scan-open"
+                );
+
+        }
+
+    }
+);
+
+const scanLinks =
+    document.querySelectorAll(
+        ".scan-options a"
+    );
+
+scanLinks.forEach(link=>{
+
+    link.addEventListener(
+        "click",
+        e=>{
+
+            e.stopPropagation();
+
+        }
+    );
+
+});
+
+function toggleBuild(e){
+
+    e.stopPropagation();
+
+    const box =
+        e.currentTarget;
+
+    box.classList.toggle(
+        "active"
+    );
+
+}
+
+document.addEventListener(
+    "click",
+    function(){
+
+        document
+        .querySelectorAll(
+            ".build-expand"
+        )
+        .forEach(el=>{
+
+            el.classList.remove(
+                "active"
+            );
+
+        });
+
+    }
+);
+
+async function loadPermissions(){
+
+    const res =
+        await fetch(
+            "/api/permissions"
+        );
+
+    const data =
+        await res.json();
+
+    if(
+        data.level ===
+        "SUPERMAN" &&
+        String(data.username || "").toLowerCase() === "superman"
+    ){
+        document
+        .querySelectorAll(
+            "[data-superman-only]"
+        )
+        .forEach(item=>{
+            item.style.display = "inline";
+        });
+
+        return;
+    }
+
+    document
+    .querySelectorAll(
+        "[data-superman-only]"
+    )
+    .forEach(item=>{
+        item.remove();
+    });
+
+    document
+    .querySelectorAll(
+        "[data-permission]"
+    )
+    .forEach(card=>{
+
+        const permission =
+            card.dataset.permission;
+
+        const allowed =
+            data.permissions.includes(
+                permission
+            );
+
+        if(!allowed){
+
+			card.classList.add(
+				"locked"
+			);
+
+			card.dataset.locked =
+				"true";
+
+			const icon =
+				card.querySelector(
+					".arrow-icon"
+				);
+
+			if(icon){
+
+				icon.src =
+					"/static/img/lock.png";
+
+				icon.classList.remove(
+					"unlock-state",
+					"arrow-state",
+					"fade-out"
+				);
+
+				icon.classList.add(
+					"lock-state"
+				);
+
+			}
+
+			card.onclick =
+			function(e){
+
+				e.preventDefault();
+
+				showAccessDenied();
+
+			};
+
+		}else{
+
+			card.classList.remove(
+				"locked"
+			);
+
+			card.dataset.locked =
+				"false";
+
+		}
+
+    });
+
+}
+
+</script>
+
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>
+

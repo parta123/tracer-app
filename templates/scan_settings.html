@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Scan</title>
+    <style>
+        *{box-sizing:border-box}
+        :root{
+            --bg:#f7f8fb;
+            --panel:#ffffff;
+            --text:#111827;
+            --muted:#667085;
+            --line:#e8ecf2;
+            --soft:#f3f5f8;
+            --primary:#ef4444;
+        }
+        body{
+            margin:0;
+            font-family:"Segoe UI", Arial, sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            padding:32px 24px;
+            font-weight:400;
+        }
+        .page{
+            max-width:940px;
+            margin:0 auto;
+        }
+        .top{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:16px;
+            margin-bottom:24px;
+        }
+        h1{
+            margin:0;
+            font-size:28px;
+            font-weight:500;
+            letter-spacing:0;
+        }
+        .subtitle{
+            margin-top:6px;
+            color:var(--muted);
+            font-size:14px;
+        }
+        .back{
+            color:var(--primary);
+            text-decoration:none;
+            font-weight:500;
+            font-size:14px;
+            padding:9px 12px;
+            border:1px solid #fee2e2;
+            border-radius:8px;
+            background:#fff;
+        }
+        .grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:16px;
+        }
+        .panel{
+            background:var(--panel);
+            border:1px solid var(--line);
+            border-radius:8px;
+            padding:18px;
+            box-shadow:0 8px 26px rgba(16,24,40,.045);
+        }
+        h2{
+            margin:0 0 14px;
+            font-size:16px;
+            font-weight:500;
+        }
+        label{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:10px 8px;
+            border:1px solid transparent;
+            border-radius:7px;
+            font-size:14px;
+            font-weight:400;
+            color:#344054;
+            cursor:pointer;
+            transition:background .15s ease,border-color .15s ease;
+        }
+        label:hover{
+            background:var(--soft);
+            border-color:#edf0f5;
+        }
+        input[type="checkbox"]{
+            width:16px;
+            height:16px;
+            accent-color:var(--primary);
+        }
+        .actions{
+            display:flex;
+            justify-content:flex-end;
+            margin-top:20px;
+        }
+        button{
+            border:none;
+            border-radius:8px;
+            background:var(--primary);
+            color:#fff;
+            padding:11px 18px;
+            font-weight:500;
+            cursor:pointer;
+            box-shadow:0 8px 18px rgba(239,68,68,.18);
+        }
+        @media(max-width:760px){
+            .grid{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="top">
+            <div>
+                <h1>Setting Scan</h1>
+                <div class="subtitle">Pilih badge dan data yang tampil di hasil scan.</div>
+            </div>
+            <a class="back" href="/">Kembali</a>
+        </div>
+
+        <div class="grid">
+            <div class="panel">
+                <h2>Badge</h2>
+                {% for key, value in settings.badges.items() %}
+                <label>
+                    <input type="checkbox" data-group="badges" data-key="{{ key }}" {% if value %}checked{% endif %}>
+                    <span>{{ key }}</span>
+                </label>
+                {% endfor %}
+            </div>
+
+            <div class="panel">
+                <h2>Data Result</h2>
+                {% set labels = {
+                    "resi":"Resi",
+                    "dp_out":"DP Out",
+                    "implant":"Implant",
+                    "seller":"Seller",
+                    "collect_staff":"Sprinter",
+                    "last_station":"Last Station",
+                    "last_status":"Last Status",
+                    "harga":"Harga",
+                    "waktu_scan":"Waktu Scan",
+                    "barang":"Barang"
+                } %}
+                {% for key, value in settings.fields.items() %}
+                <label>
+                    <input type="checkbox" data-group="fields" data-key="{{ key }}" {% if value %}checked{% endif %}>
+                    <span>{{ labels[key] }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="saveBtn">Simpan</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("saveBtn").addEventListener("click", async()=>{
+            const settings = {
+                badges:{},
+                fields:{}
+            };
+
+            document.querySelectorAll("input[type='checkbox']").forEach(input=>{
+                settings[input.dataset.group][input.dataset.key] = input.checked;
+            });
+
+            const res = await fetch("/scan_settings", {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify(settings)
+            });
+
+            const data = await res.json();
+
+            alert(data.success ? "Setting tersimpan" : "Gagal menyimpan");
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>

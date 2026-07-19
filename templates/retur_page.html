@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Tanda Terima Retur</title>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:Arial,sans-serif;
+
+    background:#f5f5f5;
+
+    padding:18px;
+
+    color:#111;
+}
+
+.card{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:18px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.06);
+}
+
+.topBar{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:18px;
+}
+
+.title{
+
+    font-size:22px;
+    font-weight:700;
+}
+
+.scanBtn{
+
+    border:none;
+
+    background:#e4001b;
+
+    color:white;
+
+    height:42px;
+
+    padding:0 18px;
+
+    border-radius:12px;
+
+    font-size:13px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+/* =========================
+SCANNER
+========================= */
+
+#scannerBox{
+
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    z-index:9999;
+
+    background:white;
+
+    border-radius:
+        24px 24px 0 0;
+
+    padding:16px;
+
+    box-shadow:
+        0 -10px 30px rgba(0,0,0,.15);
+
+    transform:
+        translateY(110%);
+
+    transition:
+        transform .32s cubic-bezier(.22,1,.36,1);
+
+    will-change:transform;
+}
+
+#scannerBox.active{
+
+    transform:
+        translateY(0);
+
+}
+
+.scannerHeader{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:12px;
+}
+
+.switchBtn{
+
+    border:none;
+
+    background:#efefef;
+
+    height:34px;
+
+    padding:0 14px;
+
+    border-radius:10px;
+
+    font-size:12px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+#reader{
+
+    width:100%;
+
+    height:300px;
+
+    background:black;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    position:relative;
+}
+
+#reader video{
+
+    width:100% !important;
+
+    height:100% !important;
+
+    object-fit:cover !important;
+}
+
+/* =========================
+MANUAL
+========================= */
+
+.manualBox{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    margin-bottom:18px;
+}
+
+.manualBox textarea{
+
+    width:100%;
+
+    min-height:110px;
+
+    border:1px solid #ddd;
+
+    border-radius:16px;
+
+    padding:14px;
+
+    font-size:14px;
+
+    resize:none;
+
+    outline:none;
+
+    font-family:inherit;
+}
+
+.manualAction{
+
+    display:flex;
+    justify-content:flex-end;
+}
+
+.manualAction button{
+
+    border:none;
+
+    background:#111;
+
+    color:white;
+
+    height:42px;
+
+    padding:0 18px;
+
+    border-radius:12px;
+
+    font-size:13px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+/* =========================
+DETAIL
+========================= */
+
+#detailPanel{
+
+    display:none;
+
+    margin-top:18px;
+}
+
+.info{
+
+    font-size:14px;
+
+    margin-bottom:8px;
+}
+
+.list{
+
+    margin-top:16px;
+
+    max-height:280px;
+
+    overflow:auto;
+
+    border:1px solid #eee;
+
+    border-radius:14px;
+}
+
+.item{
+
+    padding:11px 14px;
+
+    border-bottom:1px solid #f1f1f1;
+
+    font-size:13px;
+}
+
+.item:last-child{
+    border-bottom:none;
+}
+
+.photoInput{
+
+    margin-top:16px;
+}
+
+.btn{
+
+    width:100%;
+
+    height:52px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#e4001b;
+
+    color:white;
+
+    font-size:15px;
+    font-weight:700;
+
+    margin-top:18px;
+
+    cursor:pointer;
+}
+
+.emptyText{
+
+    text-align:center;
+
+    color:#777;
+
+    font-size:13px;
+
+    padding:30px 0;
+}
+
+#scannerBackdrop{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.45);
+
+    backdrop-filter:
+        blur(3px);
+
+    z-index:9998;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s;
+}
+
+#scannerBackdrop.active{
+
+    opacity:1;
+
+    pointer-events:auto;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="topBar">
+
+        <div class="title">
+            TANDA TERIMA
+        </div>
+
+        <button
+            class="scanBtn"
+            onclick="toggleScanner()"
+        >
+            SCAN QR
+        </button>
+
+    </div>
+
+    <!-- SCANNER -->
+	
+	<div
+		id="scannerBackdrop"
+		onclick="toggleScanner()"
+	></div>
+
+    <div id="scannerBox">
+
+        <div class="scannerHeader">
+
+            <div>
+                Scan QR / Barcode
+            </div>
+
+            <div
+                style="
+                    display:flex;
+                    gap:8px;
+                "
+            >
+
+                <button
+                    class="switchBtn"
+                    onclick="switchCamera()"
+                >
+                    SWITCH
+                </button>
+
+                <button
+                    class="switchBtn"
+                    onclick="toggleScanner()"
+                >
+                    CLOSE
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="reader"></div>
+
+    </div>
+
+    <!-- MANUAL -->
+
+    <div class="manualBox">
+
+        <textarea
+            id="manualInput"
+            placeholder="Input resi, kode, atau batch code..."
+        ></textarea>
+
+        <div class="manualAction">
+
+            <button onclick="manualSearch()">
+                CEK
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- DETAIL -->
+
+    <div id="detailPanel">
+
+        <div class="info">
+            <b>Batch:</b>
+            <span id="batchText">-</span>
+        </div>
+
+        <div class="info">
+            <b>Seller:</b>
+            <span id="sellerText">-</span>
+        </div>
+
+        <div class="info">
+            <b>Total Resi:</b>
+            <span id="totalText">0</span>
+        </div>
+
+        <div class="info">
+            <b>Status:</b>
+            <span id="statusText">-</span>
+        </div>
+
+        <div class="photoInput">
+
+            <input
+                type="file"
+                id="photo"
+                accept="image/*"
+            >
+
+        </div>
+
+        <div
+            class="list"
+            id="resiList"
+        >
+
+            <div class="emptyText">
+                Belum ada data
+            </div>
+
+        </div>
+
+        <button
+            class="btn"
+            onclick="submitRetur()"
+        >
+            TERIMA RETUR
+        </button>
+
+    </div>
+
+</div>
+
+<!-- hidden scanner input -->
+
+<input
+    id="scan-box"
+    inputmode="none"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck="false"
+    style="
+        position:absolute;
+        left:-9999px;
+        opacity:0;
+    "
+>
+
+<script>
+
+let scannerOpen = false;
+
+let currentCamera = 0;
+
+let cameras = [];
+
+let scanned = false;
+
+let currentBatch = "";
+
+let currentResiList = [];
+
+let scanner = null;
+
+const scanBox =
+    document.getElementById(
+        "scan-box"
+    );
+
+/* =========================
+TOGGLE SCANNER
+========================= */
+
+async function toggleScanner(){
+
+    const box =
+        document.getElementById(
+            "scannerBox"
+        );
+
+    const backdrop =
+        document.getElementById(
+            "scannerBackdrop"
+        );
+
+    scannerOpen = !scannerOpen;
+
+    if(scannerOpen){
+
+        box.classList.add(
+            "active"
+        );
+
+        backdrop.classList.add(
+            "active"
+        );
+
+        // focus scanner gun
+        setTimeout(() => {
+
+            scanBox.focus({
+                preventScroll:true
+            });
+
+        },150);
+
+        try{
+
+            await startScanner();
+
+        }catch(err){
+
+            console.log(
+                "NO CAMERA MODE"
+            );
+
+        }
+
+    }else{
+
+        box.classList.remove(
+            "active"
+        );
+
+        backdrop.classList.remove(
+            "active"
+        );
+
+        if(scanner){
+
+			await scanner.stop()
+			.catch(() => {});
+
+		}
+
+		document.getElementById(
+			"reader"
+		).innerHTML = "";
+
+    }
+
+}
+
+/* =========================
+START CAMERA
+========================= */
+
+async function startScanner(){
+
+    scanned = false;
+
+    try{
+
+        // reset scanner lama
+        if(scanner){
+
+            try{
+
+                await scanner.stop();
+
+            }catch(e){}
+
+            try{
+
+                await scanner.clear();
+
+            }catch(e){}
+
+        }
+
+        // kosongkan reader
+        document.getElementById(
+            "reader"
+        ).innerHTML = "";
+
+        // scanner baru
+        scanner =
+            new Html5Qrcode(
+                "reader"
+            );
+
+        // ambil kamera
+        const devices =
+            await Html5Qrcode
+            .getCameras();
+
+        cameras = devices;
+
+        console.log(
+            "CAMERAS:",
+            devices
+        );
+
+        if(!devices.length){
+
+            alert(
+                "Tidak ada kamera"
+            );
+
+            return;
+
+        }
+
+        const cameraId =
+            devices[currentCamera].id;
+
+        console.log(
+            "START CAMERA:",
+            cameraId
+        );
+
+        // START VIDEO
+        await scanner.start(
+
+            {
+                deviceId:{
+                    exact:cameraId
+                }
+            },
+
+            {
+                fps:15
+            },
+
+            onScanSuccess,
+
+            () => {}
+
+        );
+
+        console.log(
+            "CAMERA STARTED"
+        );
+
+    }catch(err){
+
+        console.log(
+            "CAMERA ERROR:",
+            err
+        );
+		alert(
+			"Tidak ada kamera ditemukan / izin kamera ditolak"
+		);
+		
+		// balikin focus scanner fisik
+		setTimeout(() => {
+
+			scanBox.focus({
+				preventScroll:true
+			});
+
+		},200);
+		setTimeout(() => {
+
+			scanBox.focus({
+				preventScroll:true
+			});
+
+		},200);
+    }
+
+}
+
+/* =========================
+SWITCH CAMERA
+========================= */
+
+async function switchCamera(){
+
+    if(cameras.length <= 1)
+        return;
+
+    currentCamera++;
+
+    if(currentCamera >= cameras.length){
+
+        currentCamera = 0;
+
+    }
+
+    await scanner.stop();
+
+    startScanner();
+
+}
+
+/* =========================
+SCAN SUCCESS
+========================= */
+
+async function onScanSuccess(decodedText){
+
+    if(scanned) return;
+
+    scanned = true;
+
+    const box =
+        document.getElementById(
+            "scannerBox"
+        );
+
+    const backdrop =
+        document.getElementById(
+            "scannerBackdrop"
+        );
+
+    // tutup overlay
+    box.classList.remove(
+        "active"
+    );
+
+    // hilangkan blur
+    backdrop.classList.remove(
+        "active"
+    );
+
+    scannerOpen = false;
+
+    // stop kamera
+    if(scanner){
+
+        await scanner.stop()
+        .catch(() => {});
+
+    }
+
+    // reset reader biar next open normal
+    document.getElementById(
+        "reader"
+    ).innerHTML = "";
+
+    // hasil scan masuk textarea
+    document.getElementById(
+        "manualInput"
+    ).value = decodedText;
+
+    // trigger flow manual
+    manualSearch();
+
+}
+
+/* =========================
+SCANNER GUN
+========================= */
+
+if(scanBox){
+
+    scanBox.addEventListener(
+
+        "keydown",
+
+        function(e){
+
+            if(e.key === "Enter"){
+
+				e.preventDefault();
+
+				const resi =
+					scanBox.value.trim();
+
+				console.log(
+					"SCAN:",
+					resi
+				);
+
+				// reset input dulu
+				scanBox.value = "";
+
+				if(
+					resi.length < 3
+				){
+					return;
+				}
+
+				// masukin hasil scan dulu
+				document.getElementById(
+					"manualInput"
+				).value = resi;
+
+				// trigger preview dulu
+				manualSearch();
+
+				// baru tutup overlay
+				setTimeout(async () => {
+
+					document.getElementById(
+						"scannerBox"
+					).classList.remove(
+						"active"
+					);
+
+					document.getElementById(
+						"scannerBackdrop"
+					).classList.remove(
+						"active"
+					);
+
+					scannerOpen = false;
+
+					// stop kamera
+					if(scanner){
+
+						await scanner.stop()
+						.catch(() => {});
+
+					}
+
+					// reset reader
+					document.getElementById(
+						"reader"
+					).innerHTML = "";
+
+				},200);
+
+			}
+
+        }
+
+    );
+
+}
+
+// paksa focus ke scanner fisik
+setInterval(() => {
+
+    // hanya saat overlay scanner kebuka
+    if(!scannerOpen)
+        return;
+
+    // kalau focus hilang
+    if(
+        document.activeElement !== scanBox
+    ){
+
+        scanBox.focus({
+            preventScroll:true
+        });
+
+    }
+
+},300);
+
+// kalau overlay scanner aktif
+// paksa hidden input tetap focus
+
+document.addEventListener(
+
+    "click",
+
+    function(e){
+
+        if(!scannerOpen)
+            return;
+
+        // jangan ganggu tombol close
+        if(
+            e.target.closest(
+                ".switchBtn"
+            )
+        ){
+            return;
+        }
+
+        setTimeout(() => {
+
+            scanBox.focus({
+                preventScroll:true
+            });
+
+        },10);
+
+    }
+
+);
+
+/* =========================
+LOAD BATCH
+========================= */
+
+function renderReceiptLookup(data){
+    currentBatch = data.batch_code || "";
+    currentResiList = [...new Set(data.resi_list || [])];
+
+    document.getElementById("detailPanel").style.display = "block";
+    document.getElementById("batchText").innerText =
+        `${data.source_type || "DATA"}: ${data.source_value || "-"}`;
+    document.getElementById("sellerText").innerText = data.seller || "-";
+    document.getElementById("totalText").innerText = currentResiList.length;
+    document.getElementById("statusText").innerText = data.status || "PROCESS";
+
+    const list = document.getElementById("resiList");
+    const fragment = document.createDocumentFragment();
+    currentResiList.forEach(resi => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.textContent = resi;
+        fragment.appendChild(item);
+    });
+    list.replaceChildren(fragment);
+}
+
+async function lookupReceipt(value){
+    const cleanValue = String(value || "").trim();
+    if(!cleanValue){ return; }
+
+    currentBatch = "";
+    currentResiList = [];
+
+    try{
+        const response = await fetch("/lookup_retur_receipt", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({value:cleanValue})
+        });
+        const data = await response.json();
+
+        if(!response.ok || !data.success){
+            document.getElementById("detailPanel").style.display = "none";
+            alert(data.error || "Resi atau kode tidak ditemukan");
+            return;
+        }
+
+        renderReceiptLookup(data);
+    }catch(error){
+        document.getElementById("detailPanel").style.display = "none";
+        alert("Gagal mencari data. Coba lagi.");
+        console.error(error);
+    }
+}
+
+async function loadBatch(batchCode){
+    return lookupReceipt(batchCode);
+}
+
+/* =========================
+MANUAL SEARCH
+========================= */
+
+async function manualSearch(){
+
+    const value =
+        document.getElementById(
+            "manualInput"
+        ).value.trim();
+
+    if(!value)
+        return;
+
+    await lookupReceipt(value);
+
+}
+
+/* =========================
+SUBMIT
+========================= */
+
+async function submitRetur(){
+
+    const photo =
+        document.getElementById(
+            "photo"
+        ).files[0];
+
+    if(!photo){
+
+        alert(
+            "Upload foto dulu"
+        );
+
+        return;
+
+    }
+
+    if(!currentResiList.length){
+
+        alert(
+            "Belum ada data"
+        );
+
+        return;
+
+    }
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "photo",
+        photo
+    );
+
+    formData.append(
+        "batch_code",
+        currentBatch
+    );
+
+    formData.append(
+        "resi_list",
+        JSON.stringify(
+            currentResiList
+        )
+    );
+
+    const res = await fetch(
+
+        "/submit_retur",
+
+        {
+            method:"POST",
+            body:formData
+        }
+
+    );
+
+    const result =
+        await res.json();
+
+    if(result.success){
+
+        alert(
+            "Tanda terima berhasil"
+        );
+
+        location.reload();
+
+    }else{
+
+        alert(
+            result.error || "Gagal"
+        );
+
+    }
+
+}
+
+</script>
+
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>

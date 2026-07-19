@@ -1,0 +1,2790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+/>
+
+<title>
+    Account Management
+</title>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+/>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+
+    background:#f5f7fb;
+
+    min-height:100vh;
+
+    padding:28px;
+
+    color:#111827;
+
+}
+
+/* =========================
+   WRAPPER
+========================= */
+
+.wrapper{
+
+    width:100%;
+
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    margin-bottom:28px;
+
+}
+
+.top-left h1{
+
+    font-size:42px;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+}
+
+.top-left p{
+
+    margin-top:10px;
+
+    font-size:16px;
+
+    color:#64748b;
+
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.top-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.notif-btn{
+
+    min-width:96px;
+    height:53px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:9px;
+
+    padding:0 16px;
+
+    color:#111827;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.05);
+
+    transition:.2s;
+
+}
+
+.notif-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.notif-btn img{
+
+    width:23px;
+    height:23px;
+
+    object-fit:contain;
+
+}
+
+.notification-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.notification-secondary-btn{
+    width:100%;
+    border:1px solid #e60023;
+    border-radius:12px;
+    padding:13px 16px;
+    background:#fff;
+    color:#e60023;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:9px 18px;
+
+    min-width:160px;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.05);
+
+    cursor:pointer;
+
+    position:relative;
+
+}
+
+.profile-avatar{
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    background:#efefef;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.profile-avatar img{
+
+    width:23px;
+    height:23px;
+
+    object-fit:contain;
+
+}
+
+.profile-name{
+
+    font-size:13px;
+
+    font-weight:500;
+
+    margin-bottom:4px;
+
+}
+
+.profile-role{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#2dbd34;
+
+    font-size:10px;
+
+    font-weight:400;
+
+}
+
+.profile-role::before{
+
+    content:"";
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#2dbd34;
+
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+}
+
+.stat-card{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:14px 16px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.04);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.stat-icon{
+
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
+    flex-shrink:0;
+
+}
+
+.stat-icon img{
+
+    width:20px;
+
+}
+
+.red{
+    background:#ffe8ec;
+}
+
+.blue{
+    background:#e8eeff;
+}
+
+.cyan{
+    background:#e6f7ff;
+}
+
+.yellow{
+    background:#fff6da;
+}
+
+.green{
+    background:#e8ffef;
+}
+
+.stat-title{
+
+    font-size:12px;
+
+    color:#64748b;
+
+}
+
+.stat-value{
+
+    margin-top:2px;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    line-height:1;
+
+}
+
+.stat-desc{
+    display:none;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.filter-box{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:12px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.04);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:16px;
+
+}
+
+.search{
+
+    flex:1;
+
+    height:42px;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:12px;
+
+    padding:0 14px;
+
+    font-size:13px;
+
+}
+
+.select{
+
+    width:180px;
+
+    height:42px;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:12px;
+
+    padding:0 12px;
+
+    font-size:13px;
+
+}
+
+.add-btn,
+.import-btn{
+
+    width:170px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#f20d2f;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 6px 18px rgba(242,13,47,.18);
+
+}
+
+.import-btn{
+
+    background:#111827;
+
+    box-shadow:
+        0 6px 18px rgba(17,24,39,.12);
+
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper{
+
+    background:white;
+
+    border-radius:34px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.05);
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+thead{
+
+    background:#f8fafc;
+
+}
+
+th{
+
+    text-align:left;
+
+    padding:14px 18px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#334155;
+
+}
+
+td{
+
+    padding:14px 18px;
+
+    border-top:1px solid #eef2f7;
+
+}
+
+/* USER */
+
+.user-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.user-avatar{
+
+    width:40px;
+    height:40px;
+
+    border-radius:12px;
+
+    background:#ffe5ea;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.user-avatar img{
+
+    width:18px;
+
+}
+
+.user-name{
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.username{
+
+    margin-top:4px;
+
+    color:#64748b;
+
+    font-size:12px;
+
+}
+
+/* LEVEL */
+
+.level{
+
+    width:max-content;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+.level-superman{
+
+    background:#ffe5ea;
+
+    color:#f20d2f;
+
+}
+
+.level-manager{
+
+    background:#e8eeff;
+
+    color:#2563eb;
+
+}
+
+.level-admin{
+
+    background:#e6f7ff;
+
+    color:#0891b2;
+
+}
+
+.level-processing{
+
+    background:#fff6da;
+
+    color:#ca8a04;
+
+}
+
+.level-driver{
+
+    background:#e8ffef;
+
+    color:#16a34a;
+
+}
+
+/* STATUS */
+
+.status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    font-weight:500;
+	
+	font-size:13px;
+
+}
+
+.dot{
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+}
+
+.online{
+    background:#22c55e;
+}
+
+.offline{
+    background:#94a3b8;
+}
+
+.away{
+    background:#f59e0b;
+}
+
+/* ACTION */
+
+.action{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.action button{
+
+    width:34px;
+    height:34px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#f8fafc;
+    color:#111827;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .16s ease,color .16s ease,transform .16s ease;
+
+}
+
+.action button:hover{
+
+    background:#fff1f3;
+    color:#d6001c;
+    transform:translateY(-1px);
+
+}
+
+.action svg{
+
+    width:17px;
+    height:17px;
+    stroke:currentColor;
+    stroke-width:1.85;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1200px){
+
+    .stats-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    body{
+
+        padding:18px;
+
+    }
+
+    .topbar{
+
+        flex-direction:column;
+
+        gap:18px;
+
+    }
+
+    .filter-box{
+
+        flex-direction:column;
+
+    }
+
+    .search,
+    .select,
+    .add-btn,
+    .import-btn{
+
+        width:100%;
+
+    }
+
+    .stats-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .table-wrapper{
+
+        overflow:auto;
+
+    }
+
+    table{
+
+        min-width:1000px;
+
+    }
+
+}
+
+#profileDropdown{
+
+    position:absolute;
+
+    top:80px;
+    right:0;
+
+    width:220px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:18px;
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.08);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transform:translateY(-10px);
+
+    transition:.2s;
+
+    z-index:9999;
+
+}
+
+#profileDropdown.active{
+
+    opacity:1;
+
+    pointer-events:auto;
+
+    transform:translateY(0);
+
+}
+
+.dropdown-name{
+
+    font-size:16px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+
+}
+
+.dropdown-status{
+
+    color:#22c55e;
+
+    font-size:13px;
+
+    margin-bottom:18px;
+
+}
+
+#profileDropdown button{
+
+    width:100%;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#f20d2f;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.top-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    position:relative;
+
+}
+
+.user-modal{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:14px;
+
+    z-index:99999;
+
+}
+
+.user-modal.active{
+
+    display:flex;
+
+}
+
+.user-modal-card{
+
+    width:min(520px, 96vw);
+
+    max-height:calc(100vh - 28px);
+
+    overflow:auto;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.15);
+
+}
+
+.modal-title{
+
+    font-size:20px;
+
+    font-weight:800;
+
+    margin-bottom:14px;
+
+}
+
+.form-group{
+
+    margin-bottom:10px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:5px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.form-group input,
+.form-group select{
+
+    width:100%;
+
+    height:38px;
+
+    border:2px solid #eef2f7;
+
+    border-radius:10px;
+
+    padding:0 12px;
+
+    outline:none;
+
+}
+
+
+
+
+
+.modal-action{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:14px;
+
+}
+
+.cancel-btn{
+
+    width:120px;
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+.save-btn{
+
+    width:120px;
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f20d2f;
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.permission-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:8px;
+
+    margin-top:6px;
+
+}
+
+.permission-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:9px 10px;
+
+    border:2px solid #eef2f7;
+
+    border-radius:10px;
+
+    background:white;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.permission-item:hover{
+
+    border-color:#f20d2f;
+
+}
+
+.permission-item input{
+
+    width:18px;
+
+    height:18px;
+
+    accent-color:#f20d2f;
+
+}
+
+.permission-item span{
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+
+
+/* MESSAGE MODAL */
+
+.message-modal-overlay{
+    position:fixed;
+    inset:0;
+    z-index:3000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(15,23,42,.38);
+    padding:24px;
+}
+
+.message-modal-overlay.show{
+    display:flex;
+}
+
+.message-modal-card{
+    width:min(440px,100%);
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 22px 55px rgba(15,23,42,.22);
+    padding:24px;
+    position:relative;
+}
+
+.message-close-btn{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:32px;
+    height:32px;
+    border:none;
+    border-radius:10px;
+    background:#f8fafc;
+    color:#111827;
+    cursor:pointer;
+    font-size:20px;
+    line-height:1;
+}
+
+.message-close-btn:hover{
+    background:#fff1f3;
+    color:#d6001c;
+}
+
+.message-title{
+    margin:0 42px 20px 0;
+    font-size:16px;
+    font-weight:600;
+    color:#111827;
+    letter-spacing:.02em;
+}
+
+.message-field{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:16px;
+}
+
+.message-field label{
+    font-size:12px;
+    font-weight:600;
+    color:#64748b;
+}
+
+.message-field input,
+.message-field textarea{
+    width:100%;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:14px;
+    color:#111827;
+    background:#fff;
+    outline:none;
+}
+
+.message-field textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.message-field input[readonly]{
+    background:#f8fafc;
+    font-weight:600;
+}
+
+.message-send-btn{
+    width:100%;
+    border:none;
+    border-radius:12px;
+    padding:13px 16px;
+    background:#e60023;
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.message-send-btn:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+.gps-modal-card{width:min(720px,100%);max-height:90vh;overflow:auto}
+.gps-helper{margin:-8px 0 18px;color:#64748b;font-size:13px;line-height:1.55}
+.gps-form-grid{display:grid;grid-template-columns:1.4fr .8fr 1fr 1fr;gap:12px}
+.gps-form-grid .message-field{margin-bottom:12px}
+.gps-capture-btn{width:100%;border:1px solid #e60023;border-radius:12px;padding:12px 14px;background:#fff;color:#e60023;font-weight:700;cursor:pointer;margin-bottom:16px}
+.gps-capture-btn:disabled{opacity:.6;cursor:wait}
+.gps-map-preview{display:none;width:100%;height:180px;border:1px solid #e2e8f0;border-radius:14px;margin:0 0 16px;background:#f8fafc}
+.gps-list-title{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px;font-size:14px;font-weight:800;color:#111827}
+.gps-count{padding:4px 9px;border-radius:999px;background:#fff1f3;color:#d6001c;font-size:11px}
+.gps-location-list{display:grid;gap:10px}
+.gps-location-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px;border:1px solid #e2e8f0;border-radius:14px;background:#fff}
+.gps-location-name{font-size:14px;font-weight:800;color:#111827}
+.gps-location-meta{margin-top:5px;color:#64748b;font-size:12px;line-height:1.45}
+.gps-delete-btn{border:none;border-radius:10px;padding:9px 12px;background:#fff1f3;color:#d6001c;font-weight:700;cursor:pointer;white-space:nowrap}
+.gps-empty{padding:20px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px;color:#64748b;font-size:13px}
+.mass-settings-list{display:grid;gap:12px;margin:18px 0}
+.mass-setting-option{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;cursor:pointer}
+.mass-setting-option input{width:20px;height:20px;accent-color:#d6001c;flex:0 0 auto}
+.mass-setting-copy{display:flex;flex-direction:column;gap:3px}
+.mass-setting-copy strong{font-size:14px;color:#111827}
+.mass-setting-copy span{font-size:12px;color:#64748b;line-height:1.4}
+.mass-settings-status{padding:10px 12px;border-radius:12px;background:#fff7f8;color:#9f1239;font-size:12px;line-height:1.45}
+@media(max-width:760px){.gps-form-grid{grid-template-columns:1fr 1fr}.gps-form-grid .gps-name-field{grid-column:1/-1}.top-right{flex-wrap:wrap}.notif-btn{min-width:auto}}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+        <div class="top-left">
+
+            <h1>
+                Account Management
+            </h1>
+
+            <p>
+                Kelola akun, level akses, dan permission pengguna
+            </p>
+
+        </div>
+
+        <div class="top-right">
+
+            <button class="notif-btn" type="button" onclick="openGpsLocationModal()">
+                <span style="font-size:22px;line-height:1">⌖</span>
+                <span>Titik GPS</span>
+            </button>
+
+            <button class="notif-btn" type="button" onclick="openMassSettingsModal()">
+                <span style="font-size:19px;line-height:1">&#9881;</span>
+                <span>Setting Massal</span>
+            </button>
+
+            <button class="notif-btn" type="button" onclick="openNotificationModal()">
+
+                <img
+                    src="/static/img/menu/bell.png"
+                >
+
+                <span>Notif</span>
+
+            </button>
+
+            <div
+				class="profile"
+				id="profileBox"
+			>
+
+                <div class="profile-avatar">
+
+                    <img
+                        src="/static/img/menu/user.png"
+                    >
+
+                </div>
+
+                <div>
+
+                    <div
+						class="profile-name"
+						id="profileName"
+					>
+						User
+					</div>
+
+                    <div class="profile-role">
+						Online
+					</div>
+
+                </div>
+
+            </div>
+			
+			<div id="profileDropdown">
+
+				<div
+					class="dropdown-name"
+					id="dropdownUsername"
+				>
+					User
+				</div>
+
+				<div class="dropdown-status">
+					Online
+				</div>
+
+				<button onclick="logout()">
+					Logout
+				</button>
+
+			</div>
+
+        </div>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon red">
+
+                <img
+                    src="/static/img/menu/users.png"
+                >
+
+            </div>
+
+            <div>
+
+                <div class="stat-title">
+                    Total User
+                </div>
+
+                <div class="stat-value">
+                    {{ total_user }}
+                </div>
+
+                <div class="stat-desc">
+                    Semua akun
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon cyan">
+
+                <img
+                    src="/static/img/menu/manager.png"
+                >
+
+            </div>
+
+            <div>
+
+                <div class="stat-title">
+                    Manager
+                </div>
+
+                <div class="stat-value">
+                    {{ manager_count }}
+                </div>
+
+                <div class="stat-desc">
+                    Level Manager
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon yellow">
+
+                <img
+                    src="/static/img/menu/processing.png"
+                >
+
+            </div>
+
+            <div>
+
+                <div class="stat-title">
+                    Processing
+                </div>
+
+                <div class="stat-value">
+                    {{ processing_count }}
+                </div>
+
+                <div class="stat-desc">
+                    Level Processing
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon green">
+
+                <img
+                    src="/static/img/menu/driver.png"
+                >
+
+            </div>
+
+            <div>
+
+                <div class="stat-title">
+                    Driver
+                </div>
+
+                <div class="stat-value">
+                    {{ driver_count }}
+                </div>
+
+                <div class="stat-desc">
+                    Level Driver
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-box">
+
+        <input
+			type="text"
+			class="search"
+			id="searchInput"
+			onkeyup="filterTable()"
+			placeholder="Cari nama atau username..."
+		>
+
+        <select
+			class="select"
+			id="levelFilter"
+			onchange="filterTable()"
+		>
+			<option value="">
+				Semua Level
+			</option>
+
+			<option value="MANAGER">
+				MANAGER
+			</option>
+
+			<option value="ADMIN">
+				ADMIN
+			</option>
+
+			<option value="PROCESSING">
+				PROCESSING
+			</option>
+
+			<option value="DRIVER">
+				DRIVER
+			</option>
+		</select>
+
+
+        <select class="select">
+
+            <option>
+                Semua Status
+            </option>
+
+        </select>
+
+        <button
+			class="add-btn"
+			onclick="openAddUser()"
+		>
+			+ Tambah Akun
+		</button>
+
+        <button
+			class="import-btn"
+			onclick="openImportUser()"
+		>
+			Import
+		</button>
+
+        <input
+            type="file"
+            id="importUserFile"
+            accept=".xlsx,.xls"
+            style="display:none"
+            onchange="importUsers(this)"
+        >
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+                    <th>Akun</th>
+                    <th>Username</th>
+                    <th>Level</th>
+                    <th>Status</th>
+                    <th>Terakhir Aktif</th>
+                    <th>Aksi</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for user in users %}
+
+                <tr>
+
+                    <td>
+                        {{ loop.index }}
+                    </td>
+
+                    <td>
+
+                        <div class="user-box">
+
+
+                            <div>
+
+                                <div class="user-name">
+                                    {{ user[1] }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        <div class="username">
+                            @{{ user[2] }}
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        <div class="level level-{{ user[4]|lower }}">
+
+                            {{ user[4] }}
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        <div class="status">
+
+                            <div class="dot online"></div>
+
+                            Online
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        26 Mei 2025 09:42:18
+
+                    </td>
+
+                    <td>
+
+                        <div class="action">
+
+							<button
+								class="message-user-btn"
+								data-fullname="{{ user[1] }}"
+								data-username="{{ user[2] }}"
+								type="button"
+								aria-label="Kirim pesan"
+							>
+
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H6l-3 2 1.2-4.2A8 8 0 1 1 21 12z"/><path d="M8 11h8"/><path d="M8 15h5"/></svg>
+
+							</button>
+							<button
+								class="edit-user-btn"
+								data-id="{{ user[0] }}"
+								data-fullname="{{ user[1] }}"
+								data-username="{{ user[2] }}"
+								data-password="{{ user[3] }}"
+								data-level="{{ user[4] }}"
+								data-permissions="{{ user[5] or '' }}"
+								data-attendance-bypass="{{ user[7] or 0 }}"
+                                data-iphone-user="{{ user[8] or 0 }}"
+                                data-disable-location-lock="{{ user[9] or 0 }}"
+							>
+
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5z"/></svg>
+
+							</button>
+
+							<button onclick="deleteUser('{{ user[0] }}')">
+
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5"/><path d="M14 11v5"/></svg>
+
+							</button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div id="userModal" class="user-modal">
+
+    <div class="user-modal-card">
+
+        <div class="modal-title" id="modalTitle">
+            Tambah Akun
+        </div>
+
+        <input type="hidden" id="userId">
+
+        <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" id="fullnameInput">
+        </div>
+
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="usernameInput">
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="text" id="passwordInput">
+        </div>
+
+        <div class="form-group">
+            <label>Level</label>
+
+            <select id="levelInput">
+
+                <option value="MANAGER">MANAGER</option>
+                <option value="ADMIN">ADMIN</option>
+                <option value="PROCESSING">PROCESSING</option>
+                <option value="DRIVER">DRIVER</option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Absensi</label>
+
+            <label class="permission-item bypass-attendance-item">
+
+                <input
+                    type="checkbox"
+                    id="attendanceBypassInput"
+                >
+
+                <span>Bypass Absen</span>
+
+            </label>
+            <label class="permission-item">
+                <input
+                    type="checkbox"
+                    id="iphoneUserInput"
+                >
+                <span>iPhone User</span>
+            </label>
+            <label class="permission-item">
+                <input
+                    type="checkbox"
+                    id="disableLocationLockInput"
+                >
+                <span>Disable Lock Location</span>
+            </label>
+</div>
+        <div class="form-group">
+
+            <label>Hak Akses Menu</label>
+
+			<div class="permission-grid">
+
+				<label class="permission-item">
+					<input type="checkbox" class="permission" value="ATTENDANCE_ONLY">
+					<span>Attendance Only</span>
+				</label>
+
+				<label class="permission-item">
+					<input type="checkbox" class="permission" value="DASHBOARD_ABSEN">
+					<span>Dashboard Absen</span>
+				</label>
+
+				<label class="permission-item">
+					<input type="checkbox" class="permission" value="MANAGE_ABSEN">
+					<span>Manage Absen</span>
+				</label>
+
+				<label class="permission-item">
+					<input type="checkbox" class="permission" value="ACCOUNT_MANAGEMENT">
+					<span>Account Management</span>
+				</label>
+
+			</div>
+
+		</div>
+
+        <div class="modal-action">
+
+            <button
+                class="cancel-btn"
+                onclick="closeUserModal()"
+            >
+                Batal
+            </button>
+
+            <button
+                class="save-btn"
+                onclick="saveUser()"
+            >
+                Simpan
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="messageModalOverlay" class="message-modal-overlay" onclick="closeMessageModal()">
+
+    <div class="message-modal-card" onclick="event.stopPropagation()">
+
+        <button class="message-close-btn" type="button" onclick="closeMessageModal()" aria-label="Tutup">&times;</button>
+
+        <h3 class="message-title">Kirim Pesan</h3>
+
+        <input type="hidden" id="messageRecipientUsername">
+
+        <div class="message-field">
+            <label>Tujuan Akun</label>
+            <input id="messageRecipientName" type="text" readonly>
+        </div>
+
+        <div class="message-field">
+            <label>Isi Pesan</label>
+            <textarea id="messageText" placeholder="Tulis pesan..."></textarea>
+        </div>
+
+        <div class="message-field">
+            <label>Upload Foto</label>
+            <input id="messagePhoto" type="file" accept="image/*">
+        </div>
+
+        <button id="messageSendBtn" class="message-send-btn" type="button" onclick="sendAccountMessage()">Kirim</button>
+
+    </div>
+
+</div>
+
+<div id="massSettingsModalOverlay" class="message-modal-overlay" onclick="closeMassSettingsModal()">
+    <div class="message-modal-card" onclick="event.stopPropagation()">
+        <button class="message-close-btn" type="button" onclick="closeMassSettingsModal()" aria-label="Tutup">&times;</button>
+        <h3 class="message-title">Setting Massal Semua Akun</h3>
+        <p class="gps-helper">Centang untuk mengaktifkan ke seluruh akun. Hilangkan centang untuk menonaktifkan dari seluruh akun.</p>
+
+        <div class="mass-settings-list">
+            <label class="mass-setting-option">
+                <input id="massIphoneUser" type="checkbox">
+                <span class="mass-setting-copy">
+                    <strong>iPhone User semua akun</strong>
+                    <span>Semua akun memakai alur absensi iPhone.</span>
+                </span>
+            </label>
+            <label class="mass-setting-option">
+                <input id="massAttendanceBypass" type="checkbox">
+                <span class="mass-setting-copy">
+                    <strong>Bypass Absen semua akun</strong>
+                    <span>Semua akun dapat masuk tanpa kewajiban absensi.</span>
+                </span>
+            </label>
+            <label class="mass-setting-option">
+                <input id="massDisableLocationLock" type="checkbox">
+                <span class="mass-setting-copy">
+                    <strong>Disable Lock Location semua akun</strong>
+                    <span>Semua akun tetap dapat absen walaupun berada di luar titik GPS.</span>
+                </span>
+            </label>
+        </div>
+
+        <div id="massSettingsStatus" class="mass-settings-status">Memuat status akun...</div>
+        <button id="massSettingsSaveBtn" class="message-send-btn" type="button" onclick="saveMassSettings()">Terapkan ke Semua Akun</button>
+    </div>
+</div>
+
+<div id="gpsLocationModalOverlay" class="message-modal-overlay" onclick="closeGpsLocationModal()">
+    <div class="message-modal-card gps-modal-card" onclick="event.stopPropagation()">
+        <button class="message-close-btn" type="button" onclick="closeGpsLocationModal()" aria-label="Tutup">&times;</button>
+        <h3 class="message-title">Titik GPS Lock Absensi</h3>
+        <p class="gps-helper">Tambahkan beberapa lokasi absensi. Ambil posisi perangkat saat ini atau isi koordinat dari titik yang dipilih di Maps.</p>
+
+        <div class="gps-form-grid">
+            <div class="message-field gps-name-field">
+                <label>Nama Lokasi</label>
+                <input id="gpsLocationName" type="text" maxlength="80" placeholder="Contoh: Gudang Tangerang">
+            </div>
+            <div class="message-field">
+                <label>Radius (meter)</label>
+                <input id="gpsLocationRadius" type="number" min="20" max="2000" value="100">
+            </div>
+            <div class="message-field">
+                <label>Latitude</label>
+                <input id="gpsLocationLatitude" type="number" step="any" placeholder="-6.261473">
+            </div>
+            <div class="message-field">
+                <label>Longitude</label>
+                <input id="gpsLocationLongitude" type="number" step="any" placeholder="106.587635">
+            </div>
+        </div>
+
+        <button id="gpsCaptureBtn" class="gps-capture-btn" type="button" onclick="captureGpsLocation()">Gunakan GPS Perangkat Saat Ini</button>
+        <iframe id="gpsMapPreview" class="gps-map-preview" title="Preview titik GPS" loading="lazy"></iframe>
+        <button id="gpsSaveBtn" class="message-send-btn" type="button" onclick="saveGpsLocation()">Tambah Titik GPS</button>
+
+        <div class="gps-list-title">
+            <span>Daftar Lokasi</span>
+            <span id="gpsLocationCount" class="gps-count">0 titik</span>
+        </div>
+        <div id="gpsLocationList" class="gps-location-list"></div>
+    </div>
+</div>
+
+<div id="notificationModalOverlay" class="message-modal-overlay" onclick="closeNotificationModal()">
+
+    <div class="message-modal-card" onclick="event.stopPropagation()">
+
+        <button class="message-close-btn" type="button" onclick="closeNotificationModal()" aria-label="Tutup">&times;</button>
+
+        <h3 class="message-title">Notifikasi Semua Akun</h3>
+
+        <div class="message-field">
+            <label>Isi Pesan</label>
+            <textarea id="notificationText" placeholder="Pesan untuk seluruh pengguna. Notif update boleh dikosongkan untuk memakai pesan bawaan."></textarea>
+        </div>
+
+        <div class="message-field">
+            <label>Versi Update</label>
+            <input id="notificationVersion" type="text" value="{{ attendance_app_version or '' }}" placeholder="Contoh: 1.0.7">
+        </div>
+
+        <div class="notification-actions">
+            <button id="notificationUpdateBtn" class="message-send-btn" type="button" onclick="sendGlobalNotification('update')">Notif Update</button>
+            <button id="notificationMessageBtn" class="notification-secondary-btn" type="button" onclick="sendGlobalNotification('message')">Notif Message</button>
+        </div>
+
+    </div>
+
+</div>
+<script>
+
+let attendanceGpsLocations = {{ attendance_locations|default([])|tojson }};
+
+const username =
+    localStorage.getItem("username");
+
+if(username){
+
+    document.getElementById(
+        "profileName"
+    ).innerText = username;
+
+    document.getElementById(
+        "dropdownUsername"
+    ).innerText = username;
+
+}
+
+document
+.getElementById("profileBox")
+.addEventListener("click", function(e){
+
+    e.stopPropagation();
+
+    document
+    .getElementById("profileDropdown")
+    .classList.toggle("active");
+
+});
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href="/logout";
+
+}
+
+document.addEventListener("click", function(e){
+
+    const profileBox =
+        document.getElementById("profileBox");
+
+    const profileDropdown =
+        document.getElementById("profileDropdown");
+
+    if(
+        !profileBox.contains(e.target) &&
+        !profileDropdown.contains(e.target)
+    ){
+
+        profileDropdown.classList.remove(
+            "active"
+        );
+
+    }
+
+});
+
+function deleteUser(id){
+
+    if(!confirm("Hapus akun ini?")){
+        return;
+    }
+
+    fetch("/delete_user",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            id:id
+        })
+
+    })
+    .then(r=>r.json())
+    .then(data=>{
+
+        if(data.success){
+
+            location.reload();
+
+        }else{
+
+            alert(data.error);
+
+        }
+
+    });
+
+}
+
+function openImportUser(){
+
+    document
+    .getElementById("importUserFile")
+    .click();
+
+}
+
+function downloadImportedUsers(users){
+
+    const rows = [
+        [
+            "Nama",
+            "Username",
+            "Password"
+        ],
+        ...users.map(user=>[
+            user.fullname,
+            user.username,
+            user.password
+        ])
+    ];
+
+    const csv =
+        rows
+        .map(row=>
+            row
+            .map(value=>
+                `"${String(value || "").replaceAll('"','""')}"`
+            )
+            .join(",")
+        )
+        .join("\n");
+
+    const blob = new Blob(
+        [
+            "\ufeff" + csv
+        ],
+        {
+            type:"text/csv;charset=utf-8;"
+        }
+    );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+    link.download = "hasil_import_akun.csv";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+}
+
+function importUsers(input){
+
+    const file =
+        input.files[0];
+
+    if(!file){
+        return;
+    }
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "file",
+        file
+    );
+
+    fetch("/import_users",{
+
+        method:"POST",
+
+        body:formData
+
+    })
+    .then(r=>r.json())
+    .then(data=>{
+
+        input.value = "";
+
+        if(data.success){
+
+            downloadImportedUsers(
+                data.imported || []
+            );
+
+            alert(
+                `${data.count} akun berhasil diimport. File username dan password sudah didownload.`
+            );
+
+            location.reload();
+
+        }else{
+
+            alert(
+                data.error ||
+                "Import gagal"
+            );
+
+        }
+
+    })
+    .catch(err=>{
+
+        console.error(err);
+
+        input.value = "";
+
+        alert(
+            "Gagal koneksi ke server"
+        );
+
+    });
+
+}
+
+
+function openAddUser(){
+
+    document.getElementById(
+        "modalTitle"
+    ).innerText = "Tambah Akun";
+
+    document.getElementById(
+        "userId"
+    ).value = "";
+
+    document.getElementById(
+        "fullnameInput"
+    ).value = "";
+
+    document.getElementById(
+        "usernameInput"
+    ).value = "";
+
+    document.getElementById(
+        "passwordInput"
+    ).value = "";
+
+    document.getElementById(
+        "levelInput"
+    ).value = "ADMIN";
+
+    document.getElementById(
+        "attendanceBypassInput"
+    ).checked = false;
+    document.getElementById(
+        "iphoneUserInput"
+    ).checked = false;
+    document.getElementById(
+        "disableLocationLockInput"
+    ).checked = false;
+
+    setPermissionChecks(
+        ""
+    );
+
+    document
+    .getElementById("userModal")
+    .classList.add("active");
+
+}
+
+function openEditUser(
+    id,
+    fullname,
+    username,
+    password,
+    level,
+    permissions,
+    attendanceBypass,
+    iphoneUser,
+    disableLocationLock
+){
+
+    document.getElementById(
+        "modalTitle"
+    ).innerText = "Edit Akun";
+
+    document.getElementById(
+        "userId"
+    ).value = id;
+
+    document.getElementById(
+        "fullnameInput"
+    ).value = fullname;
+
+    document.getElementById(
+        "usernameInput"
+    ).value = username;
+
+    document.getElementById(
+        "passwordInput"
+    ).value = password;
+
+    document.getElementById(
+        "levelInput"
+    ).value = level;
+
+    document.getElementById(
+        "attendanceBypassInput"
+    ).checked = (
+        String(attendanceBypass || "0") === "1" ||
+        String(permissions || "")
+        .split(",")
+        .map(item=>item.trim())
+        .includes("ATTENDANCE_BYPASS")
+    );
+    document.getElementById(
+        "iphoneUserInput"
+    ).checked = String(iphoneUser || "0") === "1";
+    document.getElementById(
+        "disableLocationLockInput"
+    ).checked = String(disableLocationLock || "0") === "1";
+
+    setPermissionChecks(
+        permissions
+    );
+
+    document
+    .getElementById("userModal")
+    .classList.add("active");
+
+}
+
+function setPermissionChecks(permissions){
+
+    const activePermissions =
+        String(
+            permissions || ""
+        )
+        .split(",")
+        .map(item=>item.trim())
+        .filter(Boolean);
+
+    document
+    .querySelectorAll(
+        ".permission"
+    )
+    .forEach(input=>{
+
+        input.checked =
+            activePermissions.includes(
+                input.value
+            );
+
+    });
+
+    syncAttendanceOnlyPermission(
+        document.querySelector(
+            '.permission[value="ATTENDANCE_ONLY"]'
+        )
+    );
+
+}
+
+function syncAttendanceOnlyPermission(changedInput){
+
+    const inputs =
+        Array.from(
+            document.querySelectorAll(
+                ".permission"
+            )
+        );
+
+    const attendanceOnly =
+        inputs.find(
+            input=>input.value === "ATTENDANCE_ONLY"
+        );
+
+    if(!attendanceOnly){
+        return;
+    }
+
+    if(
+        changedInput === attendanceOnly &&
+        attendanceOnly.checked
+    ){
+
+        inputs
+        .filter(input=>input !== attendanceOnly)
+        .forEach(input=>{
+            input.checked = false;
+        });
+
+        return;
+
+    }
+
+    if(
+        changedInput &&
+        changedInput !== attendanceOnly &&
+        changedInput.checked
+    ){
+
+        attendanceOnly.checked = false;
+
+    }
+
+}
+
+document
+.querySelectorAll(
+    ".permission"
+)
+.forEach(input=>{
+
+    input.addEventListener(
+        "change",
+        function(){
+            syncAttendanceOnlyPermission(
+                this
+            );
+        }
+    );
+
+});
+
+document
+.querySelectorAll(
+    ".edit-user-btn"
+)
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        function(){
+
+            openEditUser(
+                this.dataset.id,
+                this.dataset.fullname,
+                this.dataset.username,
+                this.dataset.password,
+                this.dataset.level,
+                this.dataset.permissions,
+                this.dataset.attendanceBypass,
+                this.dataset.iphoneUser,
+                this.dataset.disableLocationLock
+            );
+
+        }
+    );
+
+});
+
+function closeUserModal(){
+
+    document
+    .getElementById("userModal")
+    .classList.remove("active");
+
+}
+
+function saveUser(){
+
+    const userId =
+        document.getElementById(
+            "userId"
+        ).value;
+
+    const url =
+        userId
+        ? "/update_user"
+        : "/add_user";
+		
+	const permissions =
+
+		Array.from(
+
+			document.querySelectorAll(
+				".permission:checked"
+			)
+
+		).map(x=>x.value);
+
+    fetch(url,{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            id:userId,
+
+            fullname:
+                fullnameInput.value,
+
+            username:
+                usernameInput.value,
+
+            password:
+                passwordInput.value,
+
+            level:
+				levelInput.value,
+
+			permissions:
+				permissions,
+
+            attendance_bypass:
+                document.getElementById(
+                    "attendanceBypassInput"
+                ).checked,
+
+            iphone_user:
+                document.getElementById(
+                    "iphoneUserInput"
+                ).checked,
+
+            disable_location_lock:
+                document.getElementById(
+                    "disableLocationLockInput"
+                ).checked
+
+        })
+
+    })
+    .then(r=>r.json())
+    .then(data=>{
+
+        if(data.success){
+
+            location.reload();
+
+        }else{
+
+            alert(data.error);
+
+        }
+
+    });
+
+}
+
+
+function filterTable(){
+
+    const keyword =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const level =
+        document
+        .getElementById("levelFilter")
+        .value
+        .toLowerCase();
+
+    document
+    .querySelectorAll("tbody tr")
+    .forEach(row=>{
+
+        const text =
+            row.innerText.toLowerCase();
+
+        const rowLevel =
+            row
+            .querySelector(".level")
+            .innerText
+            .toLowerCase();
+
+        const matchKeyword =
+            text.includes(keyword);
+
+        const matchLevel =
+            !level ||
+            rowLevel === level;
+
+        row.style.display =
+            matchKeyword &&
+            matchLevel
+            ? ""
+            : "none";
+
+    });
+
+}
+
+
+function gpsEscape(value){
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function renderGpsLocations(){
+    const list = document.getElementById("gpsLocationList");
+    const count = document.getElementById("gpsLocationCount");
+    count.textContent = attendanceGpsLocations.length + " titik";
+    if(!attendanceGpsLocations.length){
+        list.innerHTML = '<div class="gps-empty">Belum ada titik GPS absensi.</div>';
+        return;
+    }
+    list.innerHTML = attendanceGpsLocations.map(location => `
+        <div class="gps-location-card">
+            <div>
+                <div class="gps-location-name">${gpsEscape(location.name || "Lokasi Absensi")}</div>
+                <div class="gps-location-meta">
+                    ${Number(location.latitude).toFixed(7)}, ${Number(location.longitude).toFixed(7)}<br>
+                    Radius ${Number(location.radius || 100)} meter
+                </div>
+            </div>
+            <button class="gps-delete-btn" type="button" onclick="deleteGpsLocation('${gpsEscape(location.id)}')">Hapus</button>
+        </div>
+    `).join("");
+}
+
+function updateGpsMapPreview(){
+    const latitude = Number(document.getElementById("gpsLocationLatitude").value);
+    const longitude = Number(document.getElementById("gpsLocationLongitude").value);
+    const preview = document.getElementById("gpsMapPreview");
+    if(!Number.isFinite(latitude) || !Number.isFinite(longitude)){
+        preview.style.display = "none";
+        preview.removeAttribute("src");
+        return;
+    }
+    preview.src = `https://maps.google.com/maps?q=${encodeURIComponent(latitude + "," + longitude)}&z=17&output=embed`;
+    preview.style.display = "block";
+}
+
+function renderMassSettingsStatus(result){
+    const total = Number(result.total || 0);
+    const iphoneCount = Number(result.iphone_count || 0);
+    const bypassCount = Number(result.bypass_count || 0);
+    const locationLockDisabledCount = Number(result.location_lock_disabled_count || 0);
+    document.getElementById("massIphoneUser").checked = Boolean(result.all_iphone_user);
+    document.getElementById("massAttendanceBypass").checked = Boolean(result.all_attendance_bypass);
+    document.getElementById("massDisableLocationLock").checked = Boolean(result.all_disable_location_lock);
+    document.getElementById("massSettingsStatus").textContent =
+        `${iphoneCount}/${total} iPhone User · ${bypassCount}/${total} Bypass Absen · ${locationLockDisabledCount}/${total} Disable Lock Location`;
+}
+
+async function openMassSettingsModal(){
+    const overlay = document.getElementById("massSettingsModalOverlay");
+    const status = document.getElementById("massSettingsStatus");
+    overlay.classList.add("show");
+    status.textContent = "Memuat status akun...";
+    try{
+        const response = await fetch("/api/account_bulk_settings", {cache:"no-store"});
+        const result = await response.json();
+        if(!response.ok || !result.success) throw new Error(result.error || "Gagal memuat setting massal");
+        renderMassSettingsStatus(result);
+    }catch(error){
+        status.textContent = error.message || "Gagal memuat setting massal";
+    }
+}
+
+function closeMassSettingsModal(){
+    document.getElementById("massSettingsModalOverlay").classList.remove("show");
+}
+
+async function saveMassSettings(){
+    const iphoneUser = document.getElementById("massIphoneUser").checked;
+    const attendanceBypass = document.getElementById("massAttendanceBypass").checked;
+    const disableLocationLock = document.getElementById("massDisableLocationLock").checked;
+    if(!confirm("Terapkan setting ini ke semua akun?")) return;
+
+    const button = document.getElementById("massSettingsSaveBtn");
+    button.disabled = true;
+    button.textContent = "Menyimpan...";
+    try{
+        const response = await fetch("/api/account_bulk_settings", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                iphone_user:iphoneUser,
+                attendance_bypass:attendanceBypass,
+                disable_location_lock:disableLocationLock
+            })
+        });
+        const result = await response.json();
+        if(!response.ok || !result.success) throw new Error(result.error || "Setting massal gagal disimpan");
+        renderMassSettingsStatus(result);
+        alert(result.message || "Setting massal berhasil disimpan");
+    }catch(error){
+        alert(error.message || "Setting massal gagal disimpan");
+    }finally{
+        button.disabled = false;
+        button.textContent = "Terapkan ke Semua Akun";
+    }
+}
+
+function openGpsLocationModal(){
+    document.getElementById("gpsLocationName").value = "";
+    document.getElementById("gpsLocationLatitude").value = "";
+    document.getElementById("gpsLocationLongitude").value = "";
+    document.getElementById("gpsLocationRadius").value = "100";
+    document.getElementById("gpsMapPreview").style.display = "none";
+    renderGpsLocations();
+    document.getElementById("gpsLocationModalOverlay").classList.add("show");
+}
+
+function closeGpsLocationModal(){
+    document.getElementById("gpsLocationModalOverlay").classList.remove("show");
+}
+
+function captureGpsLocation(){
+    if(!navigator.geolocation){
+        alert("Browser ini tidak mendukung GPS");
+        return;
+    }
+    const button = document.getElementById("gpsCaptureBtn");
+    button.disabled = true;
+    button.textContent = "Mengambil koordinat...";
+    navigator.geolocation.getCurrentPosition(position => {
+        document.getElementById("gpsLocationLatitude").value = position.coords.latitude.toFixed(8);
+        document.getElementById("gpsLocationLongitude").value = position.coords.longitude.toFixed(8);
+        updateGpsMapPreview();
+        button.disabled = false;
+        button.textContent = "Gunakan GPS Perangkat Saat Ini";
+    }, error => {
+        button.disabled = false;
+        button.textContent = "Gunakan GPS Perangkat Saat Ini";
+        alert("Koordinat gagal diambil: " + error.message);
+    }, {enableHighAccuracy:true, timeout:30000, maximumAge:0});
+}
+
+async function saveGpsLocation(){
+    const button = document.getElementById("gpsSaveBtn");
+    const payload = {
+        name: document.getElementById("gpsLocationName").value.trim(),
+        latitude: document.getElementById("gpsLocationLatitude").value,
+        longitude: document.getElementById("gpsLocationLongitude").value,
+        radius: document.getElementById("gpsLocationRadius").value
+    };
+    if(!payload.name || payload.latitude === "" || payload.longitude === ""){
+        alert("Nama lokasi dan koordinat wajib diisi");
+        return;
+    }
+    button.disabled = true;
+    button.textContent = "Menyimpan...";
+    try{
+        const response = await fetch("/api/attendance_locations", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if(!response.ok || !result.success) throw new Error(result.error || "Titik GPS gagal disimpan");
+        attendanceGpsLocations = result.locations || [];
+        renderGpsLocations();
+        document.getElementById("gpsLocationName").value = "";
+        alert(result.message || "Titik GPS ditambahkan");
+    }catch(error){
+        alert(error.message || "Titik GPS gagal disimpan");
+    }finally{
+        button.disabled = false;
+        button.textContent = "Tambah Titik GPS";
+    }
+}
+
+async function deleteGpsLocation(locationId){
+    if(!confirm("Hapus titik GPS ini?")) return;
+    try{
+        const response = await fetch("/api/attendance_locations/" + encodeURIComponent(locationId), {method:"DELETE"});
+        const result = await response.json();
+        if(!response.ok || !result.success) throw new Error(result.error || "Titik GPS gagal dihapus");
+        attendanceGpsLocations = result.locations || [];
+        renderGpsLocations();
+    }catch(error){
+        alert(error.message || "Titik GPS gagal dihapus");
+    }
+}
+
+document.getElementById("gpsLocationLatitude").addEventListener("change", updateGpsMapPreview);
+document.getElementById("gpsLocationLongitude").addEventListener("change", updateGpsMapPreview);
+
+function openNotificationModal(){
+    document.getElementById("notificationText").value = "";
+    document.getElementById("notificationModalOverlay").classList.add("show");
+}
+
+function closeNotificationModal(){
+    document.getElementById("notificationModalOverlay").classList.remove("show");
+}
+
+async function sendGlobalNotification(type){
+    const text = document.getElementById("notificationText").value.trim();
+    const version = document.getElementById("notificationVersion").value.trim();
+    const updateButton = document.getElementById("notificationUpdateBtn");
+    const messageButton = document.getElementById("notificationMessageBtn");
+
+    if(type === "message" && !text){
+        alert("Isi pesan wajib diisi untuk Notif Message");
+        return;
+    }
+    if(type === "update" && !version){
+        alert("Versi update wajib diisi");
+        return;
+    }
+
+    updateButton.disabled = true;
+    messageButton.disabled = true;
+
+    try{
+        const response = await fetch("/send_account_notification", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({type:type, message:text, version:version})
+        });
+        const result = await response.json();
+        if(!response.ok || !result.success){
+            alert(result.error || "Notifikasi gagal dikirim");
+            return;
+        }
+        closeNotificationModal();
+        const versionInfo = result.version ? " - versi " + result.version : "";
+        alert((result.message || "Notifikasi terkirim") + versionInfo + " (" + result.sent_count + " akun)");
+    }catch(error){
+        alert("Notifikasi gagal dikirim");
+    }finally{
+        updateButton.disabled = false;
+        messageButton.disabled = false;
+    }
+}
+
+function openMessageModal(fullname, username){
+
+    const overlay = document.getElementById("messageModalOverlay");
+
+    document.getElementById("messageRecipientUsername").value = username || "";
+    document.getElementById("messageRecipientName").value = (fullname || username || "-") + (username ? " (@" + username + ")" : "");
+    document.getElementById("messageText").value = "";
+    document.getElementById("messagePhoto").value = "";
+
+    overlay.classList.add("show");
+
+    setTimeout(()=>{
+        document.getElementById("messageText").focus();
+    }, 80);
+}
+
+function closeMessageModal(){
+
+    const overlay = document.getElementById("messageModalOverlay");
+
+    if(overlay){
+        overlay.classList.remove("show");
+    }
+}
+
+async function sendAccountMessage(){
+
+    const button = document.getElementById("messageSendBtn");
+    const formData = new FormData();
+    const username = document.getElementById("messageRecipientUsername").value.trim();
+    const message = document.getElementById("messageText").value.trim();
+    const photo = document.getElementById("messagePhoto").files[0];
+
+    if(!username){
+        alert("Tujuan akun belum dipilih");
+        return;
+    }
+
+    if(!message && !photo){
+        alert("Isi pesan atau upload foto dulu");
+        return;
+    }
+
+    formData.append("recipient_username", username);
+    formData.append("message", message);
+
+    if(photo){
+        formData.append("photo", photo);
+    }
+
+    button.disabled = true;
+    button.innerText = "Mengirim...";
+
+    try{
+        const response = await fetch("/send_account_message", {
+            method:"POST",
+            body:formData
+        });
+        const result = await response.json();
+
+        if(!response.ok || !result.success){
+            alert(result.error || "Pesan gagal dikirim");
+            return;
+        }
+
+        const pollUntil = Date.now() + (3 * 60 * 1000);
+        localStorage.setItem("accountMessagePollUntil", String(pollUntil));
+        if(window.startAccountMessagePolling){
+            window.startAccountMessagePolling();
+        }
+
+        closeMessageModal();
+        alert(result.message || ("Pesan hanya dikirim ke @" + username));
+
+    }catch(error){
+        alert("Pesan gagal dikirim");
+    }finally{
+        button.disabled = false;
+        button.innerText = "Kirim";
+    }
+}
+
+document
+.querySelectorAll(
+    ".message-user-btn"
+)
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        function(){
+            openMessageModal(
+                this.dataset.fullname,
+                this.dataset.username
+            );
+        }
+    );
+
+});
+</script>
+
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>
+
+

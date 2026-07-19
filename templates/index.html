@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scanner Resi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20260701-station-modal-2') }}">
+</head>
+<body class="icon-dark">
+
+
+
+  <input id="gun-input" type="text" autocomplete="off"
+	style="position:fixed; top:-100px; opacity:0;">
+	
+  <input
+	id="scan-box"
+	inputmode="none"
+	autocomplete="off"
+	autocorrect="off"
+	autocapitalize="off"
+	spellcheck="false"
+	style="
+	position:absolute;
+	left:-9999px;
+	opacity:0;
+	"
+	>
+
+  <div id="reader">
+	  <div id="blur-overlay"></div>
+	</div>
+	
+	
+	
+
+  <div id="idle-bg">
+    <div class="idle-content">
+        <img src="/static/img/scan-bg.png" class="idle-img">
+    </div>
+</div>
+	
+
+
+  <a href="/check_ticket">
+	<button>Mode Claim / Complaint</button>
+	</a>
+	
+	<div id="top-panel">
+		  <!-- Tombol Input Manual -->
+		  <button id="manual-btn" onclick="manualInput()" class="toggle-icon">
+			  <img src="{{ url_for('static', filename='img/manual.png') }}">
+			</button>
+		  
+
+		  <!-- Tombol Switch Kamera -->
+		  <button id="switch-btn" onclick="switchCamera()" class="toggle-icon">
+			  <img src="{{ url_for('static', filename='img/switch.png') }}">
+			</button>
+	<div id="scan-pill-row">
+
+		<!-- SPOT INPUT -->
+		<div id="spot-box">
+
+		  <input
+			id="spot-input"
+			placeholder="Scan Karung"
+			readonly
+		  >
+
+		</div>
+
+	</div>
+
+	</div>
+	
+	<button id="toggle-panel">&#9660;</button>
+
+	<div id="kode-overlay" onclick="closeKodeOverlay(event)">
+
+		<div id="kode-box" onclick="event.stopPropagation()">
+
+			<div id="kode-title">
+				SCAN KARUNG
+			</div>
+
+			<input
+				id="kode-input"
+				type="text"
+				autocomplete="off"
+				inputmode="none"
+			>
+			
+			<button id="kode-keyboard-btn">
+
+					<svg viewBox="0 0 24 24" fill="none">
+
+						<path
+							d="M4 7C4 5.89543 4.89543 5 6 5H18C19.1046 5 20 5.89543 20 7V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V7Z"
+							stroke="currentColor"
+							stroke-width="1.8"
+						/>
+
+						<path
+							d="M7 10H8M10 10H11M13 10H14M16 10H17"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+						/>
+
+						<path
+							d="M7 14H17"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+						/>
+
+					</svg>
+
+				</button>
+
+				<button id="kode-reset-btn">
+
+					<svg viewBox="0 0 24 24" fill="none">
+
+						<path
+							d="M20 11C20 15.4183 16.4183 19 12 19C7.58172 19 4 15.4183 4 11C4 6.58172 7.58172 3 12 3C14.2516 3 16.2862 3.93106 17.7426 5.42857"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+						/>
+
+						<path
+							d="M18 3V7H14"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+
+					</svg>
+
+				</button>
+
+
+				
+			
+		</div>
+
+	</div>
+
+  <!-- Panel Hasil Scan -->
+  <div id="result-panel" onclick="closePanel()">
+    <div id="result-content"></div>
+  </div>
+
+  <audio id="beep" src="{{ url_for('static', filename='beep.mp3') }}" preload="auto"></audio>
+  <audio id="errorSound" src="{{ url_for('static', filename='error.mp3') }}" preload="auto"></audio>
+
+  <script src="{{ url_for('static', filename='js/scanner.js', v='20260701-station-modal-2') }}"></script>
+  
+  
+  <div id="barang-overlay">
+
+    <div id="barang-popup">
+
+        <div id="barang-popup-title">
+            DETAIL BARANG
+        </div>
+
+        <div id="barang-popup-text"></div>
+
+    </div>
+
+</div>
+
+<div id="warning-overlay">
+
+	<div id="warning-box">
+
+		<div id="warning-title">
+			SCAN CODE BELUM ADA
+		</div>
+
+		<div id="warning-text">
+			Lanjut scan tanpa scan code?
+		</div>
+
+		<div id="warning-actions">
+
+			<button id="warning-cancel">
+				Batal
+			</button>
+
+			<button id="warning-confirm">
+				Lanjut
+			</button>
+
+		</div>
+
+	</div>
+
+</div>
+
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>
+
+
+
+

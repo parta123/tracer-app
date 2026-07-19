@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Absen {{ 'Pulang' if attendance_mode|default('clock_in') == 'clock_out' else 'Masuk' }}</title>
+<style>
+:root{--red:#e30613;--red-dark:#ce0010;--ink:#111827;--muted:#667085;--line:#eaecf0;--green:#16a34a;--green-soft:#e7f7eb;--pink:#fff0f1;--nav:78px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#f4f5f7;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;letter-spacing:0}
+body{display:flex;justify-content:center}
+button,a{font:inherit;-webkit-tap-highlight-color:transparent}
+button{border:0;cursor:pointer}
+.app{width:100%;max-width:480px;min-height:100svh;background:#fff;position:relative;padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom));overflow:hidden}
+.topbar{height:72px;padding:env(safe-area-inset-top) 18px 0;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;border-bottom:1px solid #f0f1f3;background:#fff;position:relative;z-index:3}
+.back,.icon-button{width:44px;height:44px;background:transparent;display:grid;place-items:center;color:var(--ink)}
+.topbar h1{text-align:center;font-size:17px;font-weight:750}
+.screen{height:calc(100svh - 72px - var(--nav) - env(safe-area-inset-bottom));min-height:560px;overflow:hidden;padding:16px 20px 12px;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+.location{background:linear-gradient(100deg,#fff1f1,#fde9ea);border-radius:14px;padding:16px 14px;display:grid;grid-template-columns:38px 1fr auto;gap:11px;align-items:center}
+.location-pin{color:var(--red);display:grid;place-items:center}
+.location-copy{min-width:0}
+.eyebrow{font-size:12px;font-weight:700;margin-bottom:6px}
+.location-name{font-size:14px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.location-meta{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.35}
+.area-badge{font-size:11px;font-weight:700;color:var(--green);background:var(--green-soft);padding:8px 11px;border-radius:999px;white-space:nowrap}
+.area-badge.bad{color:#d92d20;background:#fee4e2}
+.prompt{text-align:center;font-size:13px;font-weight:500;margin:16px 0 11px}
+.camera-ring{width:min(62vw,266px);aspect-ratio:1;border-radius:50%;margin:0 auto;padding:6px;background:conic-gradient(var(--green) 0turn,var(--green) 1turn);box-shadow:0 0 0 1px #d8f3df;position:relative}
+.camera-shell{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#e9edf1;border:5px solid #fff;position:relative}
+#video,#preview{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block}
+#preview{display:none}
+#canvas{display:none}
+.camera-empty{position:absolute;inset:0;display:grid;place-items:center;color:#98a2b3;text-align:center;font-size:12px;font-weight:650;pointer-events:none}
+.camera-empty svg{display:block;margin:0 auto 8px}
+.face-card{margin-top:13px;border:1px solid var(--line);border-radius:13px;padding:14px 17px 13px;box-shadow:0 3px 12px rgba(16,24,40,.05)}
+.face-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.face-label{font-size:13px;font-weight:700}
+.score{font-size:31px;line-height:1;color:var(--green);font-weight:800;margin-top:8px}
+.quality{font-size:12px;font-weight:700;color:var(--green);background:var(--green-soft);padding:8px 13px;border-radius:999px}
+.quality.bad{color:#d92d20;background:#fee4e2}
+.track{height:9px;border-radius:999px;background:#e5e7eb;margin-top:16px;overflow:hidden}
+.track>span{height:100%;width:0;display:block;border-radius:inherit;background:linear-gradient(90deg,#1cad4b,#16a34a);transition:width .55s ease}
+.face-help{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.4}
+.shift-box{display:none;margin-top:13px;border:1px solid var(--line);padding:12px;border-radius:12px}
+.shift-box.show{display:block}
+.shift-label{font-size:12px;font-weight:700;margin-bottom:9px}
+.shift-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.shift-option{height:44px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:12px;font-weight:700}
+.shift-option.active{background:var(--red);border-color:var(--red);color:#fff}
+.actions{margin-top:12px;display:grid;gap:7px}
+#captureView>.actions{position:absolute;left:20px;right:20px;bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 8px);z-index:6;margin:0}
+#captureView>.actions .primary{order:2}#captureView>.actions .secondary{order:1}
+.primary{height:54px;border-radius:10px;color:#fff;background:linear-gradient(90deg,var(--red),#ef101c);font-size:15px;font-weight:750;box-shadow:0 4px 10px rgba(227,6,19,.16)}
+.primary:disabled{opacity:.55;cursor:not-allowed}
+.secondary{height:42px;color:var(--ink);background:#fff;font-size:14px;font-weight:650;display:none}
+.secondary.show{display:block}
+.status-message{text-align:center;font-size:11px;color:var(--muted);min-height:16px;margin-top:8px}
+.success{display:none;text-align:center}
+.success.show{display:block}
+.success-photo{width:min(66vw,282px);aspect-ratio:1;border-radius:50%;object-fit:cover;border:6px solid #fff;box-shadow:0 0 0 5px #4dcc73;margin:8px auto 20px;display:block}
+.success h2{font-size:24px;font-weight:850;color:var(--green);margin-bottom:7px}
+.success-sub{font-size:13px;color:var(--muted)}
+.success-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px;text-align:left}
+.success-item{background:#f8fafc;border-radius:10px;padding:13px}
+.success-item.wide{grid-column:1/-1}
+.success-key{font-size:11px;color:var(--muted);margin-bottom:5px}
+.success-value{font-size:14px;font-weight:750;line-height:1.35}
+.mobile-view{display:none;height:100%;min-height:0}.mobile-view.show{display:flex;flex-direction:column}
+.home-view{position:absolute;inset:0 0 calc(var(--nav) + env(safe-area-inset-bottom)) 0;height:auto;z-index:4;background:#fff;overflow:auto;scrollbar-width:none}.home-view::-webkit-scrollbar{display:none}.home-header{height:170px;flex:0 0 auto;background:linear-gradient(145deg,#ee0714,#d90010);color:#fff;padding:34px 35px 0;position:relative;overflow:hidden}.home-header:before{content:"";position:absolute;left:-5%;right:-5%;bottom:-31px;height:66px;border-radius:50% 47% 0 0/52% 58% 0 0;background:#f0525d;transform:rotate(1.8deg)}.home-header:after{content:"";position:absolute;left:-6%;right:-6%;bottom:-43px;height:67px;border-radius:48% 53% 0 0/55% 46% 0 0;background:#fff;transform:rotate(-1deg)}.home-greeting{font-size:14px;opacity:.95}.home-name{font-size:25px;font-weight:800;margin-top:5px}.home-role{font-size:14px;margin-top:4px;opacity:.9}.home-bell{position:absolute;right:31px;top:57px;width:40px;height:40px;background:transparent;color:#fff;display:grid;place-items:center}.home-bell-count{position:absolute;right:1px;top:0;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#fff;color:var(--red);display:none;place-items:center;font-size:9px;font-weight:800}.home-content{padding:0 31px 12px;position:relative;z-index:2}.home-card{border:1px solid #e5e7eb;border-radius:16px;background:#fff;box-shadow:0 2px 5px rgba(16,24,40,.12)}.status-card{padding:14px 20px;margin-top:-3px}.status-top{display:grid;grid-template-columns:1fr 62px;gap:12px;align-items:center}.status-label{font-size:13px;color:#4b5563}.status-value{font-size:24px;line-height:1.15;color:#d80010;font-weight:750;margin-top:5px}.status-date{font-size:12px;color:#7a8494;margin-top:6px}.status-clock{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#e7f7eb;color:var(--green);justify-self:end}.home-action{height:46px;width:100%;border-radius:11px;background:var(--red);color:#fff;margin-top:13px;font-size:14px;font-weight:650;display:flex;align-items:center;justify-content:center;position:relative}.home-action svg{position:absolute;right:18px}.home-section-title{font-size:14px;font-weight:550;margin:16px 3px 8px}.info-card{padding:3px 17px}.info-row{height:55px;display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;border-bottom:1px solid #eceff2}.info-row:last-child{border-bottom:0}.info-icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center}.info-icon svg{width:22px;height:22px}.info-icon.green{background:#e5f8eb;color:#14a44d}.info-icon.blue{background:#e6f5fd;color:#168cd5}.info-icon.orange{background:#fff0e3;color:#f97316}.info-title{font-size:11px;font-weight:650}.info-value{font-size:10px;color:#7a8494;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.info-badge{font-size:9px;padding:5px 8px;border-radius:999px;background:#eef9f1;color:var(--green);max-width:92px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.info-badge.blue{background:#eaf6fd;color:#168cd5}.info-badge.orange{background:#fff1e4;color:#c96b1b}.summary-card{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:8px}.summary-item{height:93px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.summary-item:nth-child(1){background:#effaf3}.summary-item:nth-child(2){background:#fff5ec}.summary-item:nth-child(3){background:#fff1f2}.summary-item:nth-child(4){background:#f1f5ff}.summary-icon{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;margin-bottom:5px}.summary-item:nth-child(1) .summary-icon{background:#dff5e7;color:#16a34a}.summary-item:nth-child(2) .summary-icon{background:#ffead8;color:#f97316}.summary-item:nth-child(3) .summary-icon{background:#ffe0e3;color:#e30613}.summary-item:nth-child(4) .summary-icon{background:#e1eaff;color:#2563eb}.summary-number{font-size:19px;font-weight:750}.summary-label{font-size:9px;color:#7a8494;margin-top:4px;white-space:nowrap}
+.section-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:12px}.section-month{font-size:13px;font-weight:750}.month-input{border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);padding:7px 8px;font-size:11px}
+.filter-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}.filter-tab{height:34px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--muted);font-size:10px;font-weight:700}.filter-tab.active{background:var(--red);border-color:var(--red);color:#fff}
+.history-list{flex:1;min-height:0;overflow:auto;padding-right:2px;scrollbar-width:none}.history-list::-webkit-scrollbar{display:none}.history-row{display:grid;grid-template-columns:43px 1fr auto;gap:11px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.date-tile{border:1px solid #dfe3e8;border-radius:7px;text-align:center;overflow:hidden}.date-tile strong{display:block;background:#758090;color:#fff;font-size:9px;padding:3px}.date-tile span{font-size:17px;font-weight:800;display:block;padding:4px 0}.history-main{min-width:0}.history-date{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.history-times{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}.time-label{font-size:9px;color:var(--muted)}.time-value{font-size:11px;font-weight:650;margin-top:2px}.history-badge{font-size:10px;font-weight:750;padding:7px 9px;border-radius:8px;background:#e7f7eb;color:var(--green);white-space:nowrap}.history-badge.late{background:#fff1d6;color:#b54708}.history-badge.absent{background:#fee4e2;color:#d92d20}.history-badge.leave{background:#eaf2ff;color:#175cd3}.empty-state{padding:42px 12px;text-align:center;color:var(--muted);font-size:12px}
+.leave-view{gap:11px}.leave-form{border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(16,24,40,.04)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field{display:grid;gap:5px}.field.wide{grid-column:1/-1}.field label{font-size:10px;font-weight:750}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:8px;background:#fafafa;color:var(--ink);padding:9px 10px;font-size:11px;outline:none}.field textarea{height:58px;resize:none}.leave-send{height:42px;width:100%;border-radius:8px;background:var(--red);color:#fff;font-size:13px;font-weight:750;margin-top:10px}.leave-history-title{font-size:13px;font-weight:750}.leave-history{flex:1;min-height:100px;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:3px 12px;scrollbar-width:none}.leave-row{padding:11px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:10px}.leave-row:last-child{border-bottom:0}.leave-date{font-size:11px;font-weight:750}.leave-note{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.35}.leave-type{font-size:10px;font-weight:750;color:#175cd3;background:#eaf2ff;border-radius:999px;padding:6px 9px;height:max-content}
+.file-input{position:absolute!important;width:1px!important;height:1px!important;opacity:0;pointer-events:none}.file-picker{height:38px;border:1px solid var(--line);border-radius:8px;background:#fafafa;padding:0 10px;display:flex;align-items:center;color:var(--muted);font-size:11px!important;font-weight:500!important;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bottom-nav{height:calc(var(--nav) + env(safe-area-inset-bottom));padding:8px 12px env(safe-area-inset-bottom);position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:5}
+.nav-item{text-decoration:none;color:#788496;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:550}
+.nav-item.active{color:var(--red);font-weight:700}
+.nav-item svg{width:23px;height:23px;stroke-width:1.8}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav) + 18px + env(safe-area-inset-bottom));transform:translate(-50%,16px);width:min(calc(100% - 40px),420px);padding:12px 14px;border-radius:9px;background:#111827;color:#fff;font-size:12px;text-align:center;opacity:0;pointer-events:none;transition:.2s;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-height:700px){.screen{min-height:0;padding:9px 16px 7px}.location{padding:9px 11px}.location-pin svg{width:24px;height:24px}.eyebrow{font-size:10px;margin-bottom:3px}.location-name{font-size:12px}.location-meta{font-size:9px;margin-top:3px}.area-badge{font-size:9px;padding:6px 8px}.prompt{font-size:11px;margin:8px 0 6px}.camera-ring{width:min(30vh,200px);padding:4px}.camera-shell{border-width:3px}.face-card{margin-top:8px;padding:9px 12px}.face-label{font-size:11px}.score{font-size:22px;margin-top:4px}.quality{font-size:10px;padding:6px 9px}.track{height:6px;margin-top:8px}.face-help{font-size:9px;margin-top:6px}.actions{margin-top:8px;gap:3px}.primary{height:44px;font-size:13px}.secondary{height:34px}.status-message{display:none}.section-toolbar{margin-bottom:8px}.filter-tabs{margin-bottom:8px}.leave-view{gap:7px}.leave-form{padding:9px}.field input,.field select,.field textarea{padding:7px 8px}.field textarea{height:44px}.leave-send{height:36px;margin-top:7px}}
+@media(max-height:580px){.topbar{height:54px}.screen{height:calc(100svh - 54px - var(--nav) - env(safe-area-inset-bottom));padding:7px 18px 5px}.location{padding:7px 9px;grid-template-columns:29px 1fr auto;gap:7px}.location-pin svg{width:21px;height:21px}.eyebrow{font-size:9px}.location-name{font-size:10px}.location-meta{font-size:8px}.area-badge{font-size:8px;padding:5px 7px}.prompt{font-size:9px;margin:6px 0 4px}.camera-ring{width:min(26vh,150px);padding:3px}.face-card{margin-top:6px;padding:7px 10px}.face-label{font-size:9px}.score{font-size:20px}.quality{font-size:8px;padding:5px 8px}.track{height:5px;margin-top:6px}.face-help{display:none}#captureView>.actions{left:18px;right:18px;bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 7px)}.primary{height:40px;font-size:12px}.secondary{height:30px;font-size:11px}.leave-history-title{font-size:11px}.leave-form{padding:7px}.form-grid{gap:6px}.field{gap:3px}.field label{font-size:8px}.field input,.field select,.field textarea{padding:5px 7px;font-size:9px}.field textarea{height:34px}.file-picker{height:28px}.leave-send{height:31px;font-size:10px;margin-top:5px}}
+@media(max-width:300px){.home-header{height:150px;padding:25px 20px 0}.home-name{font-size:20px}.home-bell{top:48px;right:19px}.home-content{padding:0 18px 12px}.status-card{padding:13px 14px}.status-top{grid-template-columns:1fr 54px}.status-clock{width:48px;height:48px}.status-value{font-size:20px}.home-action{height:42px;margin-top:12px}.home-section-title{margin:14px 2px 8px}.info-row{height:53px;grid-template-columns:36px 1fr auto;gap:8px}.info-icon{width:33px;height:33px}.summary-card{gap:4px;padding:6px}.summary-item{height:82px}.summary-icon{width:27px;height:27px;margin-bottom:4px}.summary-number{font-size:17px}.summary-label{font-size:8px}}
+@media(min-width:700px){body{padding:20px}.app{min-height:calc(100svh - 40px);max-height:920px;border-radius:24px;box-shadow:0 14px 50px rgba(16,24,40,.12)}.screen{height:calc(100svh - 40px - 72px - var(--nav))}}
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="mobile-view home-view show" id="homeView">
+    <div class="home-header">
+      <div class="home-greeting" id="homeGreeting">Selamat pagi,</div>
+      <div class="home-name" id="homeName">{{ user_fullname }}</div>
+      <div class="home-role" id="homeRole">@{{ user_username }}</div>
+      <button class="home-bell" id="homeBell" type="button" aria-label="Notifikasi">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+        <span class="home-bell-count" id="homeBellCount">0</span>
+      </button>
+    </div>
+    <div class="home-content">
+      <section class="home-card status-card">
+        <div class="status-top">
+          <div><div class="status-label">Status Hari Ini</div><div class="status-value" id="homeStatus">Memuat...</div><div class="status-date" id="homeDate">-</div></div>
+          <button class="status-clock" id="homeSync" type="button" aria-label="Sinkronkan status">
+            <svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+          </button>
+        </div>
+        <button class="home-action" id="homeAction" type="button"><span id="homeActionLabel">Absen Masuk</span><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+      </section>
+
+      <div class="home-section-title">Informasi Absen</div>
+      <section class="home-card info-card">
+        <div class="info-row"><div class="info-icon green"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div><div><div class="info-title">Lokasi Tercatat</div><div class="info-value" id="homeLocation">-</div></div><span class="info-badge" id="homeLocationBadge">-</span></div>
+        <div class="info-row"><div class="info-icon blue"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/><circle cx="12" cy="11" r="3"/><path d="M7.5 18c1.2-2.2 7.8-2.2 9 0"/></svg></div><div><div class="info-title">Face Score</div><div class="info-value" id="homeFace">Belum tersedia</div></div><span class="info-badge blue" id="homeFaceBadge">-</span></div>
+        <div class="info-row"><div class="info-icon orange"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></div><div><div class="info-title">Jadwal Kerja</div><div class="info-value" id="homeSchedule">-</div></div><span class="info-badge orange" id="homeShift">Jam Kerja</span></div>
+      </section>
+
+      <div class="home-section-title">Ringkasan Bulan Ini</div>
+      <section class="home-card summary-card">
+        <div class="summary-item"><div class="summary-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></div><div class="summary-number" id="homeOnTime">0</div><div class="summary-label">On Time</div></div>
+        <div class="summary-item"><div class="summary-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></div><div class="summary-number" id="homeLate">0</div><div class="summary-label">Late</div></div>
+        <div class="summary-item"><div class="summary-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg></div><div class="summary-number" id="homeAbsent">0</div><div class="summary-label">Tidak Hadir</div></div>
+        <div class="summary-item"><div class="summary-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 5-14 14"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/></svg></div><div class="summary-number" id="homeRate">0%</div><div class="summary-label">Kehadiran</div></div>
+      </section>
+    </div>
+  </section>
+
+  <header class="topbar">
+    <button class="back" id="backButton" type="button" aria-label="Kembali" onclick="history.back()">
+      <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <h1 id="pageTitle">{{ 'Absen Pulang' if attendance_mode|default('clock_in') == 'clock_out' else 'Absen Masuk' }}</h1>
+    <span></span>
+  </header>
+
+  <section class="screen" id="attendanceScreen">
+    <div class="mobile-view" id="captureView">
+      <section class="location">
+        <div class="location-pin"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+        <div class="location-copy">
+          <div class="eyebrow">Lokasi Aktif</div>
+          <div class="location-name" id="locationName">Mengambil lokasi...</div>
+          <div class="location-meta" id="locationMeta">Koordinat dan akurasi sedang dibaca</div>
+        </div>
+        <span class="area-badge bad" id="areaBadge">Memuat</span>
+      </section>
+
+      <p class="prompt" id="prompt">Pastikan wajah Anda berada di dalam lingkaran</p>
+
+      <div class="camera-ring" id="cameraRing">
+        <div class="camera-shell">
+          <video id="video" autoplay muted playsinline></video>
+          <img id="preview" alt="Hasil foto absensi">
+          <canvas id="canvas"></canvas>
+          <div class="camera-empty" id="cameraEmpty"><div><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14.5 4H9.5L8 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3l-1.5-2Z"/><circle cx="12" cy="12.5" r="3.5"/></svg>Kamera sedang disiapkan</div></div>
+        </div>
+      </div>
+
+      <section class="face-card">
+        <div class="face-head">
+          <div><div class="face-label">Face Score</div><div class="score" id="scoreValue">0%</div></div>
+          <span class="quality bad" id="quality">Belum Dinilai</span>
+        </div>
+        <div class="track"><span id="scoreBar"></span></div>
+        <p class="face-help" id="faceHelp">Pastikan pencahayaan cukup dan wajah terlihat jelas</p>
+      </section>
+
+      {% set shift_total = attendance_shift.get('total_shift', 1)|int if attendance_shift else 1 %}
+      <section class="shift-box {{ 'show' if shift_total > 1 else '' }}">
+        <div class="shift-label">Pilih Shift</div>
+        <div class="shift-options">
+          <button class="shift-option active" type="button" data-shift="1">Shift 1<br>{{ attendance_shift.shift1_clock_in or '07:00' }} - {{ attendance_shift.shift1_clock_out or '12:00' }}</button>
+          <button class="shift-option" type="button" data-shift="2">Shift 2<br>{{ attendance_shift.shift2_clock_in or '13:00' }} - {{ attendance_shift.shift2_clock_out or '18:00' }}</button>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button class="primary" id="primaryButton" type="button">Ambil Foto</button>
+        <button class="secondary" id="retakeButton" type="button">Foto Ulang</button>
+      </div>
+      <div class="status-message" id="statusMessage"></div>
+    </div>
+
+    <section class="success" id="successView">
+      <img class="success-photo" id="successPhoto" alt="Foto absensi">
+      <h2 id="successTitle">CLOCK IN BERHASIL</h2>
+      <p class="success-sub" id="successSubtitle">Data absensi telah tersimpan di server</p>
+      <div class="success-grid">
+        <div class="success-item"><div class="success-key">Waktu</div><div class="success-value" id="successTime">-</div></div>
+        <div class="success-item"><div class="success-key">Face Score</div><div class="success-value" id="successScore">-</div></div>
+        <div class="success-item wide"><div class="success-key">Lokasi</div><div class="success-value" id="successLocation">-</div></div>
+      </div>
+      <div class="actions"><button class="primary" type="button" onclick="location.href='/attendance_dashboard'">Selesai</button></div>
+    </section>
+
+    <section class="mobile-view" id="historyView">
+      <div class="section-toolbar">
+        <div class="section-month" id="historyMonthLabel">Riwayat bulan ini</div>
+        <input class="month-input" id="historyMonth" type="month" aria-label="Pilih bulan riwayat">
+      </div>
+      <div class="filter-tabs" id="historyFilters">
+        <button class="filter-tab active" type="button" data-filter="all">Semua</button>
+        <button class="filter-tab" type="button" data-filter="present">On Time</button>
+        <button class="filter-tab" type="button" data-filter="late">Late</button>
+        <button class="filter-tab" type="button" data-filter="absent">Tidak Hadir</button>
+      </div>
+      <div class="history-list" id="historyList"><div class="empty-state">Memuat riwayat absensi...</div></div>
+    </section>
+
+    <section class="mobile-view leave-view" id="leaveView">
+      <form class="leave-form" id="leaveForm">
+        <div class="form-grid">
+          <div class="field"><label for="leaveType">Jenis Izin</label><select id="leaveType" name="type"><option value="IZIN">Izin</option><option value="SAKIT">Sakit</option></select></div>
+          <div class="field"><label for="leaveDate">Tanggal</label><input id="leaveDate" name="tanggal" type="date" required></div>
+          <div class="field wide"><label for="leavePhoto">Lampiran</label><input class="file-input" id="leavePhoto" name="photo" type="file" accept="image/jpeg,image/png,image/webp"><label class="file-picker" id="leavePhotoLabel" for="leavePhoto">Pilih foto lampiran</label></div>
+          <div class="field wide"><label for="leaveNote">Keterangan</label><textarea id="leaveNote" name="keterangan" placeholder="Tulis keterangan izin" required></textarea></div>
+        </div>
+        <button class="leave-send" id="leaveSend" type="submit">Kirim Izin</button>
+      </form>
+      <div class="leave-history-title">Riwayat Izin Bulan Ini</div>
+      <div class="leave-history" id="leaveHistory"><div class="empty-state">Memuat riwayat izin...</div></div>
+    </section>
+  </section>
+
+  <nav class="bottom-nav" aria-label="Navigasi utama">
+    <a class="nav-item active" href="#" data-section="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-7h6v7"/></svg><span>Beranda</span></a>
+    <a class="nav-item" href="#" data-section="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Riwayat</span></a>
+    <a class="nav-item" href="#" data-section="leave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 9h6M9 13h6"/></svg><span>Izin</span></a>
+    <a class="nav-item" href="/attendance_dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Akun</span></a>
+  </nav>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const MODE={{ attendance_mode|default('clock_in')|tojson }};
+const IS_OUT=MODE==='clock_out';
+const SHIFT={{ attendance_shift|default({})|tojson }};
+const ATTENDANCE_LOCATIONS={{ attendance_locations|default([])|tojson }};
+const FALLBACK_LOCATION={name:'Kantor Utama',latitude:-6.261473599217103,longitude:106.58763553681588,radius:100};
+const MAX_ACCURACY=300;
+const LOCATION_LOCK_DISABLED={{ disable_location_lock|default(false)|tojson }};
+const video=document.getElementById('video');
+const preview=document.getElementById('preview');
+const canvas=document.getElementById('canvas');
+const primary=document.getElementById('primaryButton');
+const retake=document.getElementById('retakeButton');
+const toast=document.getElementById('toast');
+let selectedShift='1',captured=false,faceScore=0,faceValid=false,gpsValid=LOCATION_LOCK_DISABLED,latitude=null,longitude=null,accuracy=null,distance=null,address='',nearestLocationName='',activeRadius=100,stream=null,attendanceStarted=false,homeLoaded=false,homeActionSection='attendance',latestMessage=null;
+
+function showToast(message){toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove('show'),2800)}
+function escapeHtml(value){return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+function currentMonth(){const now=new Date();return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`}
+function haversine(a,b,c,d){const r=6371000,toRad=x=>x*Math.PI/180;const p1=toRad(a),p2=toRad(c),dp=toRad(c-a),dl=toRad(d-b);const h=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;return 2*r*Math.atan2(Math.sqrt(h),Math.sqrt(1-h))}
+function distanceText(value){if(!Number.isFinite(value))return '-';return value>=1000?(value/1000).toFixed(2)+' km':Math.round(value)+' meter'}
+function nearestAttendanceLocation(lat,lng){
+  const points=ATTENDANCE_LOCATIONS.length?ATTENDANCE_LOCATIONS:[FALLBACK_LOCATION];
+  return points.map(point=>({...point,distance:haversine(lat,lng,Number(point.latitude),Number(point.longitude))})).sort((a,b)=>a.distance-b.distance)[0];
+}
+function updateLocation(){
+  const badge=document.getElementById('areaBadge');
+  if(LOCATION_LOCK_DISABLED){
+    document.getElementById('locationName').textContent=address||((latitude!==null)?`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`:'Lokasi tidak diwajibkan');
+    document.getElementById('locationMeta').textContent=latitude!==null?`Koordinat ${latitude.toFixed(6)}, ${longitude.toFixed(6)} · Lock lokasi dinonaktifkan`:'Akun ini dapat absen dari luar titik lokasi';
+    badge.textContent='Lock Lokasi Nonaktif';badge.classList.remove('bad');return;
+  }
+  document.getElementById('locationName').textContent=address||((latitude!==null)?`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`:'Mengambil lokasi...');
+  if(latitude===null){document.getElementById('locationMeta').textContent='Koordinat dan akurasi sedang dibaca';badge.textContent='Memuat';badge.classList.add('bad');return}
+  document.getElementById('locationMeta').textContent=`Koordinat ${latitude.toFixed(6)}, ${longitude.toFixed(6)} · Akurasi ±${Math.round(accuracy)} m · ${nearestLocationName||'Titik terdekat'} ${distanceText(distance)}`;
+  badge.textContent=gpsValid?`Dalam Area · ${nearestLocationName}`:'Di Luar Area';badge.classList.toggle('bad',!gpsValid);
+}
+function locate(){
+  if(!navigator.geolocation){gpsValid=LOCATION_LOCK_DISABLED;updateLocation();updateButton();if(!LOCATION_LOCK_DISABLED)showToast('Perangkat tidak mendukung GPS');return}
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    latitude=pos.coords.latitude;longitude=pos.coords.longitude;accuracy=Number.isFinite(pos.coords.accuracy)?pos.coords.accuracy:9999;const nearest=nearestAttendanceLocation(latitude,longitude);distance=nearest.distance;nearestLocationName=nearest.name||'Lokasi Absensi';activeRadius=Number(nearest.radius||100);gpsValid=LOCATION_LOCK_DISABLED||(accuracy<=MAX_ACCURACY&&distance<=activeRadius);updateLocation();updateButton();
+    try{const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,{headers:{Accept:'application/json'}});if(res.ok){const data=await res.json();address=data.display_name||'';updateLocation()}}catch(_error){}
+  },error=>{gpsValid=LOCATION_LOCK_DISABLED;if(LOCATION_LOCK_DISABLED){updateLocation();updateButton();return}document.getElementById('locationName').textContent='Lokasi belum tersedia';document.getElementById('locationMeta').textContent=error.message;document.getElementById('areaBadge').textContent='Coba Lagi';document.getElementById('areaBadge').classList.add('bad');showToast('Aktifkan izin lokasi lalu coba lagi')},{enableHighAccuracy:true,timeout:30000,maximumAge:0});
+}
+async function startCamera(){
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:720}},audio:false});video.srcObject=stream;document.getElementById('cameraEmpty').style.display='none'}
+  catch(_error){document.getElementById('cameraEmpty').innerHTML='<div>Kamera tidak dapat dibuka.<br>Izinkan akses kamera di Safari.</div>';showToast('Izin kamera diperlukan untuk absensi')}
+}
+function sample(data,w,h,x1,y1,x2,y2,type){let n=0,hit=0;for(let y=Math.floor(h*y1);y<h*y2;y+=3){for(let x=Math.floor(w*x1);x<w*x2;x+=3){const i=(y*w+x)*4,r=data[i],g=data[i+1],b=data[i+2],light=r*.299+g*.587+b*.114,max=Math.max(r,g,b),min=Math.min(r,g,b);if(type==='skin'&&r>55&&g>35&&b>25&&r>b&&max-min>12&&light>55&&light<235)hit++;if(type==='texture'&&max-min>18&&light>45&&light<230)hit++;if(type==='dark'&&light<120&&max-min>10)hit++;n++}}return n?hit/n:0}
+function evaluateFace(){
+  const w=canvas.width,h=canvas.height,ctx=canvas.getContext('2d',{willReadFrequently:true}),pixels=ctx.getImageData(0,0,w,h).data;
+  const texture=sample(pixels,w,h,.22,.12,.78,.88,'texture'),skin=sample(pixels,w,h,.22,.16,.78,.88,'skin'),le=sample(pixels,w,h,.22,.24,.47,.52,'dark'),re=sample(pixels,w,h,.53,.24,.78,.52,'dark'),mouth=sample(pixels,w,h,.32,.58,.68,.82,'dark');
+  let score=Math.min(30,texture*58)+Math.min(30,skin*62)+Math.min(22,(le+re)*100)+Math.min(18,mouth*80);faceValid=texture>=.15&&skin>=.07&&(le+re+mouth)>=.04&&score>=42;faceScore=Math.round(faceValid?Math.max(80,Math.min(99,score)):Math.min(69,score));updateScore();return faceValid;
+}
+function updateScore(){
+  document.getElementById('scoreValue').textContent=faceScore+'%';document.getElementById('scoreBar').style.width=faceScore+'%';const quality=document.getElementById('quality');quality.textContent=faceValid?(faceScore>=90?'Sangat Baik':'Baik'):'Foto Ulang';quality.classList.toggle('bad',!faceValid);document.getElementById('faceHelp').textContent=faceValid?'Wajah terdeteksi dengan pencahayaan yang cukup':'Wajah belum terbaca jelas. Arahkan wajah ke kamera';
+}
+function updateButton(){
+  if(!captured){primary.textContent='Ambil Foto';primary.disabled=false;return}
+  primary.textContent=IS_OUT?'Absen Pulang':'Absen Masuk';primary.disabled=!(faceValid&&gpsValid);document.getElementById('statusMessage').textContent=!faceValid?'Foto wajah belum lolos validasi':(!gpsValid?`Lokasi harus berada dalam radius ${activeRadius} meter dari salah satu titik absensi`:(LOCATION_LOCK_DISABLED?'Lock lokasi dinonaktifkan. Siap mengirim absensi':'Siap mengirim absensi'));
+}
+function takePhoto(){
+  if(!video.videoWidth){showToast('Kamera belum siap');return}const size=Math.min(video.videoWidth,video.videoHeight);canvas.width=640;canvas.height=640;const sx=(video.videoWidth-size)/2,sy=(video.videoHeight-size)/2;canvas.getContext('2d').drawImage(video,sx,sy,size,size,0,0,640,640);preview.src=canvas.toDataURL('image/jpeg',.86);preview.style.display='block';video.style.display='none';captured=true;retake.classList.add('show');evaluateFace();updateButton();
+}
+function resetPhoto(){captured=false;faceValid=false;faceScore=0;preview.style.display='none';video.style.display='block';retake.classList.remove('show');document.getElementById('statusMessage').textContent='';updateScore();updateButton()}
+async function submitAttendance(){
+  if(!faceValid||!gpsValid)return;primary.disabled=true;primary.textContent='Mengirim...';
+  try{
+    const safeLat=Number.isFinite(latitude)?latitude:0,safeLng=Number.isFinite(longitude)?longitude:0,safeAddress=address||(LOCATION_LOCK_DISABLED?'Lock lokasi dinonaktifkan':`${safeLat.toFixed(6)}, ${safeLng.toFixed(6)}`);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.86));const form=new FormData();form.append('photo',blob,IS_OUT?'clock-out.jpg':'attendance.jpg');form.append('latitude',safeLat);form.append('longitude',safeLng);form.append('address',safeAddress);form.append('shift_id',selectedShift);form.append('face_score',String(faceScore));form.append('device_info',navigator.userAgent.slice(0,160));form.append('app_version','iPhone Web 1.0');
+    const response=await fetch(IS_OUT?'/api/attendance_clock_out':'/api/attendance',{method:'POST',body:form});const data=await response.json();if(!response.ok||!data.success)throw new Error(data.message||'Absensi gagal disimpan');showSuccess(data.attendance||{});
+  }catch(error){showToast(error.message||'Absensi gagal dikirim');primary.disabled=false;updateButton()}
+}
+function showSuccess(data){
+  document.getElementById('captureView').style.display='none';const view=document.getElementById('successView');view.classList.add('show');document.getElementById('successPhoto').src=preview.src;document.getElementById('successTitle').textContent=IS_OUT?'CLOCK OUT BERHASIL':'CLOCK IN BERHASIL';document.getElementById('successTime').textContent=(IS_OUT?data.clock_out:data.jam)||new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});document.getElementById('successScore').textContent=((IS_OUT?data.clock_out_face_score:data.face_score)||faceScore)+'%';document.getElementById('successLocation').textContent=(IS_OUT?data.clock_out_address:data.address)||address||'-';document.getElementById('attendanceScreen').scrollTop=0;
+}
+
+let historyRows=[],historyFilter='all',historyLoaded=false,leaveLoaded=false;
+function showSection(section){
+  if(section!=='attendance'&&stream){stream.getTracks().forEach(track=>track.stop());stream=null;video.srcObject=null;attendanceStarted=false}
+  const map={home:'homeView',attendance:'captureView',history:'historyView',leave:'leaveView'};document.querySelectorAll('.mobile-view').forEach(view=>view.classList.remove('show'));const target=document.getElementById(map[section]||map.home);target.classList.add('show');
+  document.querySelectorAll('.nav-item[data-section]').forEach(item=>item.classList.toggle('active',item.dataset.section===(section==='attendance'?'home':section)));document.getElementById('pageTitle').textContent=section==='history'?'Riwayat Absen':section==='leave'?'Pengajuan Izin':(IS_OUT?'Absen Pulang':'Absen Masuk');document.getElementById('backButton').onclick=section==='attendance'?()=>showSection('home'):()=>showSection('home');
+  if(section==='attendance'&&!attendanceStarted){attendanceStarted=true;startCamera();locate()}if(section==='home'&&!homeLoaded)loadHome();if(section==='history'&&!historyLoaded)loadHistory();if(section==='leave'&&!leaveLoaded)loadLeaveHistory();
+}
+function greetingText(){const hour=new Date().getHours();return hour<11?'Selamat pagi,':hour<18?'Selamat siang,':'Selamat malam,'}
+function homeTodayDate(){return new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function applyHomeHistory(history){
+  const today=history.today||{},type=historyClass(today),clockIn=String(today.jam||'-'),clockOut=String(today.clock_out||'-'),hasIn=(type==='present'||type==='late')&&clockIn!=='-',hasOut=clockOut&&clockOut!=='-';document.getElementById('homeGreeting').textContent=greetingText();document.getElementById('homeDate').textContent=today.tanggal?`${today.hari||''}, ${today.tanggal}`:homeTodayDate();
+  if(type==='leave'){homeStatus.textContent=today.status||'Izin';homeActionLabel.textContent='Lihat Riwayat';homeActionSection='history'}else if(!hasIn){homeStatus.textContent='Belum Absen';homeActionLabel.textContent='Absen Masuk';homeActionSection='attendance'}else if(!hasOut){homeStatus.textContent='Sudah Absen Masuk';homeActionLabel.textContent='Absen Pulang';homeActionSection='attendance'}else{homeStatus.textContent='Absensi Selesai';homeActionLabel.textContent='Lihat Riwayat';homeActionSection='history'}
+  homeLocation.textContent=hasIn?(today.lokasi||'-'):'-';homeLocationBadge.textContent=today.koordinat?'GPS':'-';const score=Number(today.face_score||0);homeFace.textContent=score?`${score}%`:'Belum tersedia';homeFaceBadge.textContent=score>=90?'Sangat Baik':score>=80?'Baik':'-';homeSchedule.textContent=today.shift_range||SHIFT.range||SHIFT.shift1_range||'-';homeShift.textContent=today.shift||SHIFT.label||'Jam Kerja';homeOnTime.textContent=history.on_time_count||0;homeLate.textContent=history.late_count||0;homeAbsent.textContent=history.absent_count||0;homeRate.textContent=`${history.attendance_rate||0}%`;
+}
+async function loadHome(){
+  homeLoaded=true;document.getElementById('homeGreeting').textContent=greetingText();document.getElementById('homeDate').textContent=homeTodayDate();
+  const month=currentMonth();try{const [profileResponse,historyResponse,messageResponse]=await Promise.all([fetch(`/api/app_profile?_ts=${Date.now()}`,{cache:'no-store'}),fetch(`/api/attendance_history?month=${month}&_ts=${Date.now()}`,{cache:'no-store'}),fetch(`/api/app_messages?_ts=${Date.now()}`,{cache:'no-store'})]);const profileData=await profileResponse.json(),historyData=await historyResponse.json(),messageData=await messageResponse.json();if(profileData.success&&profileData.profile){const profile=profileData.profile;homeName.textContent=profile.display_name||profile.fullname||{{ user_fullname|tojson }};homeRole.textContent=profile.department||profile.level||`@${profile.username||{{ user_username|tojson }}}`}if(historyData.success&&historyData.history){historyRows=historyData.history.rows||[];applyHomeHistory(historyData.history)}if(messageData.success){const unread=Number(messageData.unread_count||0),messages=messageData.messages||[];latestMessage=messages[0]||null;homeBellCount.textContent=unread>99?'99+':String(unread);homeBellCount.style.display=unread?'grid':'none'}}catch(_error){homeStatus.textContent='Data Tidak Tersedia'}
+}
+function historyClass(row){const value=String(row.status_class||'').toLowerCase();if(value==='present')return'present';if(value==='late')return'late';if(value==='leave')return'leave';return'absent'}
+function statusLabel(row){const type=historyClass(row);return type==='present'?'On Time':type==='late'?'Late':type==='leave'?(row.status||'Izin'):'Tidak Hadir'}
+function dateParts(row){const raw=String(row.date_key||'');const date=new Date(raw+'T00:00:00');if(Number.isNaN(date.getTime()))return{day:'--',weekday:'-',label:row.tanggal||raw};return{day:String(date.getDate()).padStart(2,'0'),weekday:date.toLocaleDateString('id-ID',{weekday:'short'}).toUpperCase().slice(0,3),label:row.tanggal||date.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}}
+function renderHistory(){
+  const list=document.getElementById('historyList');const rows=historyRows.filter(row=>historyFilter==='all'||historyClass(row)===historyFilter);if(!rows.length){list.innerHTML='<div class="empty-state">Tidak ada data untuk filter ini.</div>';return}
+  list.innerHTML=rows.map(row=>{const date=dateParts(row),type=historyClass(row),clockIn=row.jam||'-',clockOut=row.clock_out||'-';return `<article class="history-row"><div class="date-tile"><strong>${escapeHtml(date.weekday)}</strong><span>${escapeHtml(date.day)}</span></div><div class="history-main"><div class="history-date">${escapeHtml(date.label)}</div><div class="history-times"><div><div class="time-label">Masuk</div><div class="time-value">${escapeHtml(clockIn)}</div></div><div><div class="time-label">Pulang</div><div class="time-value">${escapeHtml(clockOut)}</div></div></div></div><span class="history-badge ${type}">${escapeHtml(statusLabel(row))}</span></article>`}).join('');
+}
+async function loadHistory(){
+  const month=document.getElementById('historyMonth').value||currentMonth();document.getElementById('historyList').innerHTML='<div class="empty-state">Memuat riwayat absensi...</div>';
+  try{const response=await fetch(`/api/attendance_history?month=${encodeURIComponent(month)}&_ts=${Date.now()}`,{cache:'no-store'});const data=await response.json();if(!response.ok||!data.success)throw new Error(data.error||'Riwayat gagal dimuat');historyRows=(data.history&&data.history.rows)||[];historyLoaded=true;const date=new Date(month+'-01T00:00:00');document.getElementById('historyMonthLabel').textContent=date.toLocaleDateString('id-ID',{month:'long',year:'numeric'});renderHistory()}catch(error){document.getElementById('historyList').innerHTML=`<div class="empty-state">${escapeHtml(error.message)}</div>`}
+}
+function renderLeaveHistory(rows){
+  const list=document.getElementById('leaveHistory');if(!rows||!rows.length){list.innerHTML='<div class="empty-state">Belum ada riwayat izin bulan ini.</div>';return}list.innerHTML=rows.map(row=>`<article class="leave-row"><div><div class="leave-date">${escapeHtml(row.hari||'')} · ${escapeHtml(row.tanggal||row.date_key||'-')}</div><div class="leave-note">${escapeHtml(row.keterangan||'-')} · ${escapeHtml(row.status||'Tercatat')}</div></div><span class="leave-type">${escapeHtml(row.type||'IZIN')}</span></article>`).join('');
+}
+async function loadLeaveHistory(){
+  document.getElementById('leaveHistory').innerHTML='<div class="empty-state">Memuat riwayat izin...</div>';try{const response=await fetch(`/api/attendance_leave?month=${currentMonth()}&_ts=${Date.now()}`,{cache:'no-store'});const data=await response.json();if(!response.ok||!data.success)throw new Error(data.error||'Riwayat izin gagal dimuat');leaveLoaded=true;renderLeaveHistory((data.history&&data.history.rows)||[])}catch(error){document.getElementById('leaveHistory').innerHTML=`<div class="empty-state">${escapeHtml(error.message)}</div>`}
+}
+async function submitLeave(event){
+  event.preventDefault();const send=document.getElementById('leaveSend'),note=document.getElementById('leaveNote').value.trim();if(!note){showToast('Keterangan izin wajib diisi');return}send.disabled=true;send.textContent='Mengirim...';try{const form=new FormData(event.currentTarget);const response=await fetch('/api/attendance_leave',{method:'POST',body:form});const data=await response.json();if(!response.ok||!data.success)throw new Error(data.error||'Pengajuan izin gagal');showToast('Pengajuan izin tersimpan');document.getElementById('leaveNote').value='';document.getElementById('leavePhoto').value='';document.getElementById('leavePhotoLabel').textContent='Pilih foto lampiran';leaveLoaded=true;renderLeaveHistory((data.history&&data.history.rows)||[])}catch(error){showToast(error.message)}finally{send.disabled=false;send.textContent='Kirim Izin'}
+}
+primary.addEventListener('click',()=>captured?submitAttendance():takePhoto());retake.addEventListener('click',resetPhoto);document.getElementById('areaBadge').addEventListener('click',()=>{if(!gpsValid)locate()});document.querySelectorAll('.shift-option').forEach(button=>button.addEventListener('click',()=>{selectedShift=button.dataset.shift;document.querySelectorAll('.shift-option').forEach(item=>item.classList.toggle('active',item===button))}));document.querySelectorAll('.nav-item[data-section]').forEach(item=>item.addEventListener('click',event=>{event.preventDefault();showSection(item.dataset.section)}));
+document.getElementById('historyMonth').value=currentMonth();document.getElementById('historyMonth').addEventListener('change',()=>{historyLoaded=false;loadHistory()});document.querySelectorAll('.filter-tab').forEach(button=>button.addEventListener('click',()=>{historyFilter=button.dataset.filter;document.querySelectorAll('.filter-tab').forEach(item=>item.classList.toggle('active',item===button));renderHistory()}));document.getElementById('leaveDate').value=new Date().toISOString().slice(0,10);document.getElementById('leaveDate').min=new Date().toISOString().slice(0,10);document.getElementById('leaveForm').addEventListener('submit',submitLeave);
+document.getElementById('leavePhoto').addEventListener('change',event=>{const file=event.target.files&&event.target.files[0];document.getElementById('leavePhotoLabel').textContent=file?file.name:'Pilih foto lampiran'});
+document.getElementById('homeAction').addEventListener('click',()=>showSection(homeActionSection));document.getElementById('homeSync').addEventListener('click',()=>{homeLoaded=false;loadHome();showToast('Memperbarui status absensi...')});document.getElementById('homeBell').addEventListener('click',()=>showToast(latestMessage?(latestMessage.text||'Notifikasi baru'):'Belum ada notifikasi baru'));
+window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(track=>track.stop())});
+updateScore();loadHome();
+</script>
+<script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260716-iphone-redesign-1') }}"></script>
+</body>
+</html>

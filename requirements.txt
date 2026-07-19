@@ -1,0 +1,7 @@
+flask
+flask-cors
+requests
+openpyxl
+pandas
+PyMySQL==1.2.0
+sqlglot==30.12.0

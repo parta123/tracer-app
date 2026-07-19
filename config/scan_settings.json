@@ -1,0 +1,22 @@
+{
+  "badges": {
+    "OUTGOING": true,
+    "INCOMING": true,
+    "COMPLAINT": true,
+    "AUTOCLAIM": true,
+    "CLAIM INTERNAL": true,
+    "HIGH VALUE": false
+  },
+  "fields": {
+    "resi": true,
+    "dp_out": true,
+    "implant": true,
+    "seller": true,
+    "collect_staff": true,
+    "last_station": true,
+    "last_status": true,
+    "harga": false,
+    "waktu_scan": true,
+    "barang": false
+  }
+}

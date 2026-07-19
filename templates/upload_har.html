@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload HAR</title>
+    <style>
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+            font-family:Inter,Segoe UI,Arial,sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            background:#f4f6fb;
+            color:#111827;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:24px;
+        }
+
+        .page{
+            width:100%;
+            max-width:920px;
+            display:grid;
+            grid-template-columns:minmax(0,1fr) 320px;
+            gap:18px;
+        }
+
+        .panel,
+        .side{
+            background:#fff;
+            border:1px solid #eef0f5;
+            border-radius:22px;
+            box-shadow:0 18px 50px rgba(15,23,42,.08);
+        }
+
+        .panel{
+            padding:26px;
+        }
+
+        .top{
+            display:flex;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:24px;
+        }
+
+        .eyebrow{
+            font-size:11px;
+            letter-spacing:.08em;
+            font-weight:650;
+            color:#d6001c;
+            text-transform:uppercase;
+            margin-bottom:7px;
+        }
+
+        h1{
+            font-size:28px;
+            font-weight:650;
+            line-height:1.15;
+            margin-bottom:8px;
+        }
+
+        .desc{
+            color:#64748b;
+            font-size:13px;
+            line-height:1.6;
+            max-width:520px;
+        }
+
+        .back{
+            min-width:64px;
+            height:42px;
+            border:none;
+            border-radius:14px;
+            background:#f8fafc;
+            color:#111827;
+            cursor:pointer;
+            font-size:18px;
+            font-weight:650;
+        }
+
+        .upload-box{
+            border:1.5px dashed #d9dee8;
+            border-radius:20px;
+            background:#fbfcff;
+            padding:22px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:18px;
+        }
+
+        .file-info{
+            min-width:0;
+        }
+
+        .file-title{
+            font-size:14px;
+            font-weight:650;
+            margin-bottom:5px;
+        }
+
+        .file-name{
+            font-size:12px;
+            color:#64748b;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            max-width:360px;
+        }
+
+        .choose-btn,
+        .primary-btn,
+        .test-btn{
+            height:46px;
+            border:none;
+            border-radius:15px;
+            padding:0 18px;
+            font-weight:650;
+            font-size:12px;
+            cursor:pointer;
+            transition:.18s ease;
+            white-space:nowrap;
+        }
+
+        .choose-btn{
+            background:#111827;
+            color:white;
+        }
+
+        .primary-btn{
+            background:#d6001c;
+            color:white;
+            flex:1;
+        }
+
+        .test-btn{
+            background:#fff1f3;
+            color:#d6001c;
+            border:1px solid #ffd5dc;
+            flex:1;
+        }
+
+        .choose-btn:hover,
+        .primary-btn:hover,
+        .test-btn:hover,
+        .back:hover{
+            transform:translateY(-1px);
+        }
+
+        .actions{
+            display:flex;
+            gap:12px;
+            margin-bottom:18px;
+        }
+
+        .status{
+            min-height:52px;
+            border-radius:16px;
+            background:#f8fafc;
+            border:1px solid #eef0f5;
+            padding:14px 16px;
+            font-size:13px;
+            color:#475569;
+            display:flex;
+            align-items:center;
+        }
+
+        .status.success{
+            background:#ecfdf5;
+            border-color:#bbf7d0;
+            color:#047857;
+        }
+
+        .status.error{
+            background:#fff1f2;
+            border-color:#fecdd3;
+            color:#be123c;
+        }
+
+        .side{
+            padding:20px;
+            display:flex;
+            flex-direction:column;
+            gap:14px;
+        }
+
+        .side-title{
+            font-size:14px;
+            font-weight:650;
+        }
+
+        .last-resi{
+            padding:14px;
+            border-radius:16px;
+            background:#f8fafc;
+            border:1px solid #eef0f5;
+        }
+
+        .last-label{
+            font-size:11px;
+            color:#64748b;
+            font-weight:650;
+            margin-bottom:5px;
+        }
+
+        .last-value{
+            font-size:16px;
+            font-weight:650;
+            color:#d6001c;
+            word-break:break-all;
+        }
+
+        .result-list{
+            display:flex;
+            flex-direction:column;
+            gap:9px;
+            max-height:360px;
+            overflow:auto;
+            padding-right:3px;
+        }
+
+        .api-row{
+            border:1px solid #eef0f5;
+            border-radius:14px;
+            padding:11px 12px;
+            display:grid;
+            grid-template-columns:1fr auto;
+            gap:8px;
+            align-items:center;
+            background:#fff;
+        }
+
+        .api-name{
+            font-size:12px;
+            font-weight:650;
+        }
+
+        .api-msg{
+            grid-column:1 / -1;
+            color:#64748b;
+            font-size:11px;
+            line-height:1.4;
+        }
+
+        .pill{
+            height:24px;
+            padding:0 9px;
+            border-radius:999px;
+            display:flex;
+            align-items:center;
+            font-size:10px;
+            font-weight:650;
+        }
+
+        .pill.ok{
+            background:#dcfce7;
+            color:#047857;
+        }
+
+        .pill.fail{
+            background:#ffe4e6;
+            color:#be123c;
+        }
+
+        input[type="file"]{
+            display:none;
+        }
+
+        @media(max-width:820px){
+            .page{
+                grid-template-columns:1fr;
+            }
+
+            .top,
+            .upload-box,
+            .actions{
+                flex-direction:column;
+                align-items:stretch;
+            }
+
+            .back{
+                align-self:flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="panel">
+            <div class="top">
+                <div>
+                    <div class="eyebrow">Header Manager</div>
+                    <h1>Upload HAR</h1>
+                    <p class="desc">
+                        Upload file HAR untuk mengambil header J&T, lalu jalankan test untuk memastikan header masih valid di API scan.
+                    </p>
+                </div>
+
+                <button class="back" onclick="window.location.href='/'">BACK</button>
+            </div>
+
+            <form id="harForm">
+                <div class="upload-box">
+                    <div class="file-info">
+                        <div class="file-title">File HAR</div>
+                        <div class="file-name" id="fileName">Belum ada file dipilih</div>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="choose-btn"
+                        onclick="document.getElementById('harFile').click()"
+                    >
+                        PILIH FILE
+                    </button>
+
+                    <input
+                        type="file"
+                        id="harFile"
+                        name="har_file"
+                        accept=".har"
+                        required
+                    >
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="primary-btn" id="uploadBtn">
+                        UPLOAD HAR
+                    </button>
+
+                    <button type="button" class="test-btn" id="testBtn">
+                        TEST HAR
+                    </button>
+                </div>
+            </form>
+
+            <div class="status" id="statusBox">
+                Pilih file HAR atau tekan Test HAR jika header sudah pernah diupload.
+            </div>
+        </section>
+
+        <aside class="side">
+            <div class="side-title">Hasil Test</div>
+
+            <div class="last-resi">
+                <div class="last-label">RESI TEST</div>
+                <div class="last-value" id="lastResi">-</div>
+            </div>
+
+            <div class="result-list" id="resultList">
+                <div class="api-row">
+                    <div class="api-name">Menunggu test</div>
+                    <div class="pill fail">IDLE</div>
+                    <div class="api-msg">Hasil pengecekan API akan tampil di sini.</div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        const form = document.getElementById("harForm");
+        const harFile = document.getElementById("harFile");
+        const fileName = document.getElementById("fileName");
+        const statusBox = document.getElementById("statusBox");
+        const uploadBtn = document.getElementById("uploadBtn");
+        const testBtn = document.getElementById("testBtn");
+        const lastResi = document.getElementById("lastResi");
+        const resultList = document.getElementById("resultList");
+
+        function setStatus(message, type){
+            statusBox.className = "status" + (type ? " " + type : "");
+            statusBox.innerText = message;
+        }
+
+        function renderResults(data){
+            lastResi.innerText = data.resi || "-";
+
+            const rows = data.results || [];
+
+            if(!rows.length){
+                resultList.innerHTML = `
+                    <div class="api-row">
+                        <div class="api-name">Tidak ada hasil</div>
+                        <div class="pill fail">FAIL</div>
+                        <div class="api-msg">${data.error || "-"}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            resultList.innerHTML = rows.map(item => `
+                <div class="api-row">
+                    <div class="api-name">${item.name}</div>
+                    <div class="pill ${item.success ? "ok" : "fail"}">
+                        ${item.success ? "OK" : "FAIL"}
+                    </div>
+                    <div class="api-msg">
+                        Status ${item.status} | Code ${item.code ?? "-"} | ${item.msg || "-"}
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        harFile.addEventListener("change", () => {
+            fileName.innerText =
+                harFile.files[0]
+                ? harFile.files[0].name
+                : "Belum ada file dipilih";
+        });
+
+        form.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            if(!harFile.files[0]){
+                setStatus("Pilih file HAR dulu", "error");
+                return;
+            }
+
+            uploadBtn.disabled = true;
+            uploadBtn.innerText = "UPLOADING...";
+            setStatus("Sedang mengambil header dari HAR...", "");
+
+            try{
+                const formData = new FormData(form);
+
+                const res = await fetch("/upload_har", {
+                    method:"POST",
+                    body:formData
+                });
+
+                const text = await res.text();
+
+                if(res.ok){
+                    setStatus(text || "HAR berhasil diupload", "success");
+                }else{
+                    setStatus(text || "Upload HAR gagal", "error");
+                }
+            }catch(err){
+                setStatus("Upload HAR gagal: " + err.message, "error");
+            }finally{
+                uploadBtn.disabled = false;
+                uploadBtn.innerText = "UPLOAD HAR";
+            }
+        });
+
+        testBtn.addEventListener("click", async () => {
+            testBtn.disabled = true;
+            testBtn.innerText = "TESTING...";
+            setStatus("Mengetes header ke semua API scan...", "");
+
+            try{
+                const res = await fetch("/test_har", {
+                    method:"POST"
+                });
+
+                const data = await res.json();
+
+                renderResults(data);
+
+                if(data.success){
+                    setStatus("Header sukses. Semua API berhasil diakses.", "success");
+                }else{
+                    setStatus(data.error || "Test HAR gagal", "error");
+                }
+            }catch(err){
+                setStatus("Test HAR gagal: " + err.message, "error");
+            }finally{
+                testBtn.disabled = false;
+                testBtn.innerText = "TEST HAR";
+            }
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Tracer - Server</title>
+    <style>
+        :root{
+            --red:#e31837;--red-soft:#fff1f3;--ink:#172033;--muted:#707b8e;
+            --line:#e7ebf1;--soft:#f5f7fa;--green:#15966a;--green-soft:#eaf8f2;
+            --amber:#a86508;--amber-soft:#fff6e5;--shadow:0 12px 34px rgba(28,38,63,.06)
+        }
+        *{box-sizing:border-box}
+        body{margin:0;background:var(--soft);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif}
+        button,a{font:inherit}
+        .topbar{height:64px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5}
+        .logo{font-size:22px;font-weight:900;letter-spacing:-1.4px}.logo span{color:var(--red)}
+        .back{color:#475467;text-decoration:none;font-size:12px;font-weight:750;border:1px solid var(--line);padding:9px 13px;border-radius:9px;background:#fff}
+        main{max-width:1060px;margin:0 auto;padding:28px 22px 60px}
+        .intro{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:24px}
+        .eyebrow{display:flex;align-items:center;gap:8px;color:var(--green);font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+        .eyebrow:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px var(--green-soft)}
+        h1{font-size:26px;letter-spacing:-.7px;margin:0 0 7px}.intro p{max-width:650px;color:var(--muted);font-size:13px;line-height:1.6;margin:0}
+        .download{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--red);color:#fff;text-decoration:none;font-size:12px;font-weight:700;padding:10px 13px;border-radius:9px;box-shadow:none}
+        .download:before{content:"↓";font-size:15px;line-height:1}
+        .section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:26px 2px 11px}
+        .section-head h2{font-size:17px;margin:0}.section-head p{font-size:11px;color:var(--muted);margin:4px 0 0}
+        .refresh{border:1px solid var(--line);background:#fff;color:#475467;padding:8px 12px;border-radius:9px;font-size:11px;font-weight:800;cursor:pointer}
+        .overview{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+        .metric{padding:15px 17px;border-right:1px solid var(--line)}.metric:last-child{border-right:0}
+        .metric small{display:block;color:var(--muted);font-size:10px;font-weight:750}.metric strong{display:block;font-size:21px;margin-top:4px;letter-spacing:-.5px}
+        .server-grid{display:grid;gap:10px}
+        .server-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px 18px;display:grid;grid-template-columns:minmax(220px,1.25fr) minmax(280px,1fr) auto;align-items:center;gap:18px}
+        .server-card.writer{border-color:#9ddfc7;box-shadow:0 8px 22px rgba(21,150,106,.07)}.server-card.offline{opacity:.65}
+        .server-name{display:flex;align-items:center;gap:12px;min-width:0}
+        .server-icon{width:38px;height:38px;border-radius:11px;background:#f0f3f7;display:grid;place-items:center;flex:0 0 38px}.server-icon:before{content:"";width:17px;height:13px;border:2px solid #64748b;border-radius:3px;box-shadow:0 6px 0 -4px #64748b}
+        .writer .server-icon{background:var(--green-soft)}.writer .server-icon:before{border-color:var(--green);box-shadow:0 6px 0 -4px var(--green)}
+        .server-name h3{font-size:15px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.server-name p{font-size:10px;color:var(--muted);margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .health{display:flex;align-items:center;gap:15px;justify-content:flex-start}.health span{font-size:10px;color:var(--muted);font-weight:750;white-space:nowrap}.health span:before{content:"";display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:#cbd3df}.health span.ok:before{background:var(--green)}
+        .badges{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}.badge{padding:5px 8px;border-radius:999px;background:#f0f3f7;color:#5e6878;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.25px}.badge.active{background:var(--green-soft);color:#08744e}.badge.standby{background:var(--amber-soft);color:var(--amber)}.badge.offline{background:#feedef;color:#b42338}.badge.write{background:var(--ink);color:#fff}
+        .server-meta{grid-column:1/-1;display:flex;gap:22px;padding-top:12px;border-top:1px solid #f0f2f5;color:var(--muted);font-size:10px}.server-meta b{color:#475467}.server-meta .node-id{margin-left:auto;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .empty{background:#fff;border:1px dashed #cdd5df;color:var(--muted);padding:34px;text-align:center;border-radius:14px;font-size:12px}
+        details.guide{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+        details.guide summary{list-style:none;display:flex;align-items:center;justify-content:space-between;padding:17px 19px;cursor:pointer;font-size:13px;font-weight:850}details.guide summary::-webkit-details-marker{display:none}details.guide summary:after{content:"+";font-size:20px;color:var(--muted);font-weight:400}details[open].guide summary:after{content:"−"}
+        .guide-body{border-top:1px solid var(--line);padding:18px 19px 20px}.steps{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.step{display:flex;gap:11px;padding:13px;background:#f8f9fb;border-radius:11px}.number{width:25px;height:25px;flex:0 0 25px;border-radius:8px;background:var(--red-soft);color:var(--red);display:grid;place-items:center;font-size:11px;font-weight:900}.step strong{font-size:11px}.step p{font-size:10px;color:var(--muted);line-height:1.55;margin:4px 0 0}
+        .notice{margin-top:11px;padding:11px 13px;background:var(--amber-soft);color:#7c520c;border-radius:9px;font-size:10px;line-height:1.55}
+        @media(max-width:780px){.intro{align-items:stretch;flex-direction:column}.download{width:100%}.server-card{grid-template-columns:1fr}.health,.badges{justify-content:flex-start}.server-meta{flex-wrap:wrap;gap:8px 16px}.server-meta .node-id{margin-left:0;max-width:100%}}
+        @media(max-width:560px){.topbar{padding:0 15px}main{padding:18px 12px 42px}.intro{padding:19px}.overview{grid-template-columns:repeat(2,1fr)}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.steps{grid-template-columns:1fr}.section-head{align-items:flex-end}}
+    </style>
+</head>
+<body>
+    <header class="topbar"><div class="logo">TRA<span>CER</span></div><a class="back" href="/">Kembali</a></header>
+    <main>
+        <section class="intro">
+            <div><div class="eyebrow">High Availability</div><h1>Server</h1><p>Pantau server aktif dan cadangan dalam satu tempat. Hanya server dengan status Write yang dapat mengubah data.</p></div>
+            <a class="download" href="/server_installer">Download Server Backup</a>
+        </section>
+
+        <div class="section-head"><div><h2>Status Server</h2><p id="lastRefresh">Memuat status terbaru...</p></div><button class="refresh" type="button" onclick="loadServers()">Refresh</button></div>
+        <section class="overview">
+            <div class="metric"><small>Total</small><strong id="totalServers">0</strong></div>
+            <div class="metric"><small>Online</small><strong id="onlineServers">0</strong></div>
+            <div class="metric"><small>Write</small><strong id="writeServers">0</strong></div>
+            <div class="metric"><small>Read-only</small><strong id="standbyServers">0</strong></div>
+        </section>
+        <section class="server-grid" id="serverGrid"><div class="empty">Membaca heartbeat server...</div></section>
+
+        <details class="guide">
+            <summary>Cara memasang server backup</summary>
+            <div class="guide-body">
+                <div class="steps">
+                    <div class="step"><div class="number">1</div><div><strong>Download dan ekstrak</strong><p>Ekstrak ZIP pada PC backup, lalu jalankan <b>INSTALL_SERVER.cmd</b> sebagai Administrator.</p></div></div>
+                    <div class="step"><div class="number">2</div><div><strong>Selesaikan instalasi</strong><p>Installer memasang Python, Flask, SSH database, cloudflared, serta konfigurasi yang diperlukan.</p></div></div>
+                    <div class="step"><div class="number">3</div><div><strong>Jalankan shortcut</strong><p>Klik <b>Jalankan Tracer Server</b>. Tiga CMD untuk database, Flask, dan failover akan terbuka.</p></div></div>
+                    <div class="step"><div class="number">4</div><div><strong>Periksa status</strong><p>Server baru akan muncul sebagai Backup, Read-only, dan Standby sampai primary tidak tersedia.</p></div></div>
+                </div>
+                <div class="notice"><b>Penting:</b> gunakan shortcut yang dibuat installer. Jangan menjalankan cloudflared backup secara manual.</div>
+            </div>
+        </details>
+    </main>
+    <script>
+        function esc(value){return String(value??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+        function nodeCard(node){
+            const state=node.state||"offline";
+            const role=node.node_kind==="primary"?"Primary":"Backup";
+            return `<article class="server-card ${state} ${node.writer?'writer':''}">
+                <div class="server-name"><div class="server-icon"></div><div><h3>${esc(node.node_name)}</h3><p>${esc(node.hostname)} &middot; ${esc(node.local_ip)}</p></div></div>
+                <div class="health"><span class="${node.db_tunnel_ok?'ok':''}">Database</span><span class="${node.flask_ok?'ok':''}">Flask</span><span class="${node.cloudflared_ok?'ok':''}">Cloudflare</span></div>
+                <div class="badges"><span class="badge">${role}</span><span class="badge ${state}">${state}</span><span class="badge ${node.writer?'write':''}">${node.access_mode}</span></div>
+                <div class="server-meta"><span>Versi <b>${esc(node.app_version)}</b></span><span>Terakhir terlihat <b>${esc(node.last_seen)}</b></span><span class="node-id" title="${esc(node.node_id)}">Node <b>${esc(node.node_id)}</b></span></div>
+            </article>`;
+        }
+        async function loadServers(){
+            const grid=document.getElementById('serverGrid');
+            try{
+                const response=await fetch('/api/server_nodes',{cache:'no-store'});
+                const data=await response.json();
+                if(!response.ok||!data.success) throw new Error(data.error||'Status server gagal dimuat');
+                const nodes=data.nodes||[];
+                document.getElementById('totalServers').textContent=nodes.length;
+                document.getElementById('onlineServers').textContent=nodes.filter(x=>x.online).length;
+                document.getElementById('writeServers').textContent=nodes.filter(x=>x.writer).length;
+                document.getElementById('standbyServers').textContent=nodes.filter(x=>x.online&&!x.writer).length;
+                grid.innerHTML=nodes.length?nodes.map(nodeCard).join(''):'<div class="empty">Belum ada server yang mengirim heartbeat.</div>';
+                document.getElementById('lastRefresh').textContent='Diperbarui '+new Date().toLocaleTimeString('id-ID')+' · lease '+(data.lease_until||'-');
+            }catch(error){grid.innerHTML='<div class="empty">'+esc(error.message)+'</div>';}
+        }
+        loadServers();setInterval(loadServers,5000);
+    </script>
+</body>
+</html>

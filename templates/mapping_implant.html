@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Implant</title>
+    <style>
+        *{box-sizing:border-box}
+        :root{
+            --bg:#f7f8fb;
+            --panel:#ffffff;
+            --text:#111827;
+            --muted:#667085;
+            --line:#e8ecf2;
+            --soft:#f3f5f8;
+            --primary:#ef4444;
+            --blue:#2563eb;
+        }
+        body{
+            margin:0;
+            padding:32px 24px;
+            font-family:"Segoe UI", Arial, sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            font-weight:400;
+        }
+        .page{
+            max-width:1040px;
+            margin:0 auto;
+        }
+        .top{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            margin-bottom:24px;
+        }
+        h1{
+            margin:0;
+            font-size:28px;
+            font-weight:500;
+            letter-spacing:0;
+        }
+        .subtitle{
+            margin-top:6px;
+            color:var(--muted);
+            font-size:14px;
+        }
+        .back{
+            color:var(--primary);
+            text-decoration:none;
+            font-weight:500;
+            font-size:14px;
+            padding:9px 12px;
+            border:1px solid #fee2e2;
+            border-radius:8px;
+            background:#fff;
+        }
+        .toolbar{
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            margin-bottom:16px;
+            background:#fff;
+            border:1px solid var(--line);
+            border-radius:8px;
+            padding:10px;
+            box-shadow:0 8px 26px rgba(16,24,40,.04);
+        }
+        .mapping-count{
+            margin-left:auto;
+            align-self:center;
+            color:var(--muted);
+            font-size:13px;
+        }
+        button,
+        .export-btn{
+            border:none;
+            border-radius:8px;
+            padding:10px 13px;
+            font-weight:500;
+            cursor:pointer;
+            font-family:inherit;
+            transition:filter .15s ease, transform .15s ease;
+            text-decoration:none;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            font-size:13px;
+        }
+        button:hover,
+        .export-btn:hover{
+            filter:saturate(1.05);
+            transform:translateY(-1px);
+        }
+        .add-btn,.import-btn{
+            background:var(--primary);
+            color:#fff;
+            box-shadow:0 8px 18px rgba(239,68,68,.15);
+        }
+        .save-btn{
+            background:#eff6ff;
+            color:var(--blue);
+        }
+        .export-btn{
+            background:#eff6ff;
+            color:var(--blue);
+        }
+        .delete-btn{
+            background:#fff1f2;
+            color:#dc2626;
+        }
+        input[type="text"]{
+            width:100%;
+            border:1px solid var(--line);
+            border-radius:7px;
+            padding:9px 10px;
+            outline:none;
+            color:#111827;
+            font:inherit;
+            background:#fff;
+            transition:border-color .15s ease, box-shadow .15s ease;
+        }
+        input[type="text"]:focus{
+            border-color:#fecaca;
+            box-shadow:0 0 0 3px rgba(239,68,68,.08);
+        }
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:var(--panel);
+            border:1px solid var(--line);
+            border-radius:8px;
+            overflow:hidden;
+            box-shadow:0 8px 26px rgba(16,24,40,.045);
+        }
+        th,td{
+            border-bottom:1px solid var(--line);
+            padding:11px 12px;
+            text-align:left;
+            font-size:14px;
+            font-weight:400;
+        }
+        th{
+            background:#fbfcfd;
+            font-size:12px;
+            color:#667085;
+            text-transform:uppercase;
+            letter-spacing:.02em;
+            font-weight:500;
+        }
+        tbody tr:hover{
+            background:#fcfcfd;
+        }
+        td.action-cell{
+            width:120px;
+            white-space:nowrap;
+        }
+        #excelInput{display:none}
+        .import-overlay{
+            position:fixed;
+            inset:0;
+            background:rgba(15,23,42,.22);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            padding:18px;
+            z-index:1000;
+        }
+        .import-overlay.show{
+            display:flex;
+        }
+        .import-card{
+            width:min(520px,100%);
+            background:#fff;
+            border:1px solid var(--line);
+            border-radius:10px;
+            padding:18px;
+            box-shadow:0 24px 70px rgba(15,23,42,.18);
+        }
+        .import-card h2{
+            margin:0 0 6px;
+            font-size:20px;
+            font-weight:500;
+        }
+        .import-card p{
+            margin:0 0 14px;
+            color:var(--muted);
+            font-size:13px;
+        }
+        .format-table{
+            width:100%;
+            margin:10px 0 14px;
+            box-shadow:none;
+            border-radius:8px;
+        }
+        .format-table th,
+        .format-table td{
+            padding:9px 10px;
+            font-size:13px;
+        }
+        .import-actions{
+            display:flex;
+            justify-content:flex-end;
+            gap:8px;
+        }
+        .cancel-btn{background:#f3f4f6;color:#334155}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="top">
+            <div>
+                <h1>Mapping Implant</h1>
+                <div class="subtitle">Hubungkan Sprinter atau Seller ke Implant. Seller diprioritaskan, lalu Sprinter menjadi fallback.</div>
+            </div>
+            <a class="back" href="/">Kembali</a>
+        </div>
+
+        <div class="toolbar">
+            <button class="add-btn" onclick="addRow()">Tambah Manual</button>
+            <button class="import-btn" onclick="openImportOverlay()">Import Excel</button>
+            <a class="export-btn" href="/mapping_implant/export">Export Excel</a>
+            <input id="excelInput" type="file" accept=".xlsx,.xls">
+            <div class="mapping-count" id="mappingCount">{{ mapping_rows|length }} mapping</div>
+        </div>
+
+        <table id="mappingTable">
+            <thead>
+                <tr>
+                    <th>Sprinter</th>
+                    <th>Seller</th>
+                    <th>Implant</th>
+                    <th>Edit</th>
+                    <th>Hapus</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in mapping_rows %}
+                <tr>
+                    <td><input type="text" value="{{ row.sprinter }}" placeholder="Sprinter"></td>
+                    <td><input type="text" value="{{ row.seller }}" placeholder="Seller"></td>
+                    <td><input type="text" value="{{ row.implant }}" placeholder="Implant"></td>
+                    <td class="action-cell"><button class="save-btn" onclick="saveAll()">Simpan</button></td>
+                    <td class="action-cell"><button class="delete-btn" onclick="deleteRow(this)">Hapus</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="import-overlay" id="importOverlay">
+        <div class="import-card">
+            <h2>Format Import Excel</h2>
+            <p>Gunakan kolom Sprinter, Seller, dan Implant. Sprinter atau Seller boleh dikosongkan, tetapi jangan keduanya.</p>
+
+            <table class="format-table">
+                <thead>
+                    <tr>
+                        <th>Kolom A</th>
+                        <th>Kolom B</th>
+                        <th>Kolom C</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sprinter</td>
+                        <td>Seller</td>
+                        <td>Implant</td>
+                    </tr>
+                    <tr>
+                        <td>VIKI</td>
+                        <td>SELLER A</td>
+                        <td>IMPLANT A</td>
+                    </tr>
+                    <tr>
+                        <td>TAY</td>
+                        <td>SELLER B</td>
+                        <td>IMPLANT B</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="import-actions">
+                <button class="cancel-btn" onclick="closeImportOverlay()">Batal</button>
+                <button class="import-btn" onclick="chooseExcelFile()">Pilih File Excel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openImportOverlay(){
+            document.getElementById("importOverlay").classList.add("show");
+        }
+
+        function closeImportOverlay(){
+            document.getElementById("importOverlay").classList.remove("show");
+        }
+
+        function chooseExcelFile(){
+            closeImportOverlay();
+            document.getElementById("excelInput").click();
+        }
+
+        document.getElementById("importOverlay").addEventListener("click", function(e){
+            if(e.target === this){
+                closeImportOverlay();
+            }
+        });
+
+        function escapeInputValue(value){
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        function addRow(sprinter="", seller="", implant="-"){
+            const tbody = document.querySelector("#mappingTable tbody");
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><input type="text" value="${escapeInputValue(sprinter)}" placeholder="Sprinter"></td>
+                <td><input type="text" value="${escapeInputValue(seller)}" placeholder="Seller"></td>
+                <td><input type="text" value="${escapeInputValue(implant)}" placeholder="Implant"></td>
+                <td class="action-cell"><button class="save-btn" onclick="saveAll()">Simpan</button></td>
+                <td class="action-cell"><button class="delete-btn" onclick="deleteRow(this)">Hapus</button></td>
+            `;
+            tbody.insertBefore(tr, tbody.firstChild);
+
+            const sprinterInput = tr.cells[0].querySelector("input");
+            tr.scrollIntoView({block:"center", behavior:"smooth"});
+            sprinterInput.focus();
+        }
+
+        function renderMappingRows(rows){
+            const tbody = document.querySelector("#mappingTable tbody");
+            const fragment = document.createDocumentFragment();
+
+            (rows || []).forEach(row => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><input type="text" value="${escapeInputValue(row.sprinter)}" placeholder="Sprinter"></td>
+                    <td><input type="text" value="${escapeInputValue(row.seller)}" placeholder="Seller"></td>
+                    <td><input type="text" value="${escapeInputValue(row.implant || "-")}" placeholder="Implant"></td>
+                    <td class="action-cell"><button class="save-btn" onclick="saveAll()">Simpan</button></td>
+                    <td class="action-cell"><button class="delete-btn" onclick="deleteRow(this)">Hapus</button></td>
+                `;
+                fragment.appendChild(tr);
+            });
+
+            tbody.replaceChildren(fragment);
+            document.getElementById("mappingCount").textContent =
+                `${(rows || []).length} mapping`;
+        }
+
+        function deleteRow(btn){
+            btn.closest("tr").remove();
+            saveAll();
+        }
+
+        async function saveAll(){
+            const rows = [];
+            document.querySelectorAll("#mappingTable tbody tr").forEach(row=>{
+                const sprinter = row.cells[0].querySelector("input").value.trim();
+                const seller = row.cells[1].querySelector("input").value.trim();
+                const implant = row.cells[2].querySelector("input").value.trim() || "-";
+                if(sprinter || seller){
+                    rows.push({sprinter, seller, implant});
+                }
+            });
+
+            const res = await fetch("/mapping_implant", {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({rows})
+            });
+
+            const result = await res.json();
+            if(result.success){
+                renderMappingRows(result.rows || rows);
+                alert(`Mapping tersimpan: ${result.total ?? rows.length} baris`);
+            }else{
+                alert(result.error || "Gagal menyimpan mapping");
+            }
+        }
+
+        document.getElementById("excelInput").addEventListener("change", async function(){
+            if(!this.files.length){
+                return;
+            }
+
+            const selectedFile = this.files[0];
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+
+            try{
+                const res = await fetch("/mapping_implant/import", {
+                    method:"POST",
+                    body:formData,
+                    cache:"no-store"
+                });
+
+                const result = await res.json();
+
+                if(result.success){
+                    const columns = result.detected_columns || {};
+                    const detected = [columns.sprinter, columns.seller, columns.implant]
+                        .filter(Boolean)
+                        .join(", ");
+                    renderMappingRows(result.rows || []);
+                    alert(
+                        `Import berhasil: ${result.imported ?? 0} baris. ` +
+                        `Total mapping: ${result.total ?? 0}.` +
+                        (detected ? ` Kolom terbaca: ${detected}` : "")
+                    );
+                }else{
+                    alert(result.error || "Import gagal");
+                }
+            }catch(error){
+                alert("Import gagal diproses. Coba ulangi.");
+                console.error(error);
+            }finally{
+                this.value = "";
+            }
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>

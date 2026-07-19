@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Panel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:
+    linear-gradient(
+        180deg,
+        #fcfcfc 0%,
+        #f6f7f9 100%
+    );
+
+    color:#111;
+
+    min-height:100vh;
+
+}
+
+/* HEADER */
+
+.header{
+
+    padding:24px;
+
+}
+
+.header h1{
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:#d6001c;
+
+}
+
+.header p{
+
+    margin-top:6px;
+
+    font-size:13px;
+
+    color:#777;
+
+}
+
+/* CONTAINER */
+
+.container{
+
+    padding:0 24px 24px;
+
+}
+
+/* TOP CARD */
+
+.top-card{
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:22px;
+
+    border:
+        1px solid rgba(0,0,0,.05);
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,.04);
+
+}
+
+/* TOGGLE */
+
+.type-toggle{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:22px;
+
+}
+
+.type-btn{
+
+    height:44px;
+
+    padding:0 22px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#f3f4f6;
+
+    color:#444;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+.type-btn.active{
+
+    background:#d6001c;
+
+    color:white;
+
+}
+
+/* FORM GRID */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:16px;
+
+}
+
+.input-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.input-group label{
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#666;
+
+}
+
+.input-group input,
+.input-group textarea{
+
+    width:100%;
+
+    border:none;
+
+    outline:none;
+
+    background:#f8fafc;
+
+    border:
+        1px solid rgba(0,0,0,.05);
+
+    border-radius:16px;
+
+    padding:14px;
+
+    font-size:14px;
+
+    font-family:inherit;
+
+}
+
+.input-group textarea{
+
+    min-height:110px;
+
+    resize:vertical;
+
+}
+
+/* FULL WIDTH */
+
+.full{
+
+    grid-column:1/-1;
+
+}
+
+/* SAVE BTN */
+
+.save-btn{
+
+    margin-top:18px;
+
+    width:100%;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#d6001c;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+}
+
+/* TABLE */
+
+.table-card{
+
+    margin-top:18px;
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:20px;
+
+    border:
+        1px solid rgba(0,0,0,.05);
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,.04);
+
+}
+
+.table-top{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:16px;
+
+}
+
+.table-title{
+
+    font-size:16px;
+
+    font-weight:800;
+
+}
+
+.action-row{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.action-btn{
+
+    height:40px;
+
+    padding:0 16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.edit-btn{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+}
+
+.delete-btn{
+
+    background:#ffe5e8;
+
+    color:#d6001c;
+
+}
+
+/* TABLE */
+
+.table-wrap{
+
+    overflow:auto;
+	
+	overflow:hidden;
+	border-radius:18px;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+thead{
+
+    background:#f3f4f6;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:5;
+
+}
+
+th{
+
+    text-align:left;
+
+    padding:14px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#666;
+
+}
+
+td{
+
+    padding:14px;
+
+    border-bottom:
+        1px solid #f3f4f6;
+
+    font-size:13px;
+
+    font-weight:500;
+
+}
+
+/* BADGE */
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    height:28px;
+
+    padding:0 12px;
+
+    border-radius:999px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+}
+
+.badge-complaint{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+}
+
+.badge-claim{
+
+    background:#ffe5e8;
+
+    color:#d6001c;
+
+}
+
+/* DETAIL */
+
+.detail-btn{
+
+    height:34px;
+
+    padding:0 12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#111;
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+/* TOAST */
+
+#toast{
+
+    position:fixed;
+
+    top:24px;
+
+    right:24px;
+
+    background:#111;
+
+    color:white;
+
+    padding:14px 18px;
+
+    border-radius:16px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    opacity:0;
+
+    transform:
+        translateY(-10px);
+
+    pointer-events:none;
+
+    transition:.25s ease;
+
+    z-index:99999;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.15);
+
+}
+
+#toast.show{
+
+    opacity:1;
+
+    transform:
+        translateY(0);
+
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>
+        ADMIN PANEL
+    </h1>
+
+    <p>
+        Manage Complaint & Claim
+    </p>
+
+</div>
+
+<div class="container">
+
+    <!-- TOP -->
+
+    <div class="top-card">
+
+        <div class="type-toggle">
+
+            <button
+                class="type-btn active"
+                id="complaintBtn"
+            >
+                Complaint
+            </button>
+
+            <button
+                class="type-btn"
+                id="claimBtn"
+            >
+                Claim
+            </button>
+
+        </div>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+
+                <label>
+                    Nomor Resi
+                </label>
+
+                <textarea
+                    id="resi"
+                    placeholder="1 resi per baris"
+                ></textarea>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+                    Seller / Penerima
+                </label>
+
+                <input
+                    type="text"
+                    id="seller"
+                    placeholder="Input nama"
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+                    Tanggal
+                </label>
+
+                <input
+                    type="date"
+                    id="tanggal"
+                >
+
+            </div>
+
+            <div
+                class="input-group"
+                id="nominalWrap"
+                style="display:none"
+            >
+
+                <label>
+                    Nominal
+                </label>
+
+                <input
+                    type="number"
+                    id="nominal"
+                    placeholder="Input nominal"
+                >
+
+            </div>
+
+            <div class="input-group full">
+
+                <label>
+                    Upload Foto
+                </label>
+
+                <input
+                    type="file"
+                    id="photo"
+                >
+
+            </div>
+			
+			<div class="input-group full">
+
+				<label>
+					Keterangan
+				</label>
+
+				<textarea
+					id="keterangan"
+					placeholder="Input keterangan complaint / claim..."
+				></textarea>
+
+			</div>
+
+        </div>
+
+        <button
+			class="save-btn"
+			id="saveBtn"
+		>
+            SAVE DATA
+        </button>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="table-card">
+
+        <div class="table-top">
+
+			<div
+				style="
+					display:flex;
+					gap:12px;
+					align-items:center;
+					flex-wrap:wrap;
+				"
+			>
+
+				<div class="table-title">
+					DATA LIST
+				</div>
+
+				<input
+					type="text"
+					id="searchInput"
+					placeholder="Search resi / seller..."
+					style="
+						height:40px;
+						width:240px;
+						border:none;
+						outline:none;
+						background:#f8fafc;
+						border:1px solid rgba(0,0,0,.05);
+						border-radius:12px;
+						padding:0 14px;
+						font-size:13px;
+					"
+				>
+
+				<select
+					id="filterType"
+					style="
+						height:40px;
+						border:none;
+						outline:none;
+						background:#f8fafc;
+						border:1px solid rgba(0,0,0,.05);
+						border-radius:12px;
+						padding:0 14px;
+						font-size:13px;
+						font-weight:700;
+					"
+				>
+
+					<option value="ALL">
+						ALL
+					</option>
+
+					<option value="COMPLAINT">
+						COMPLAINT
+					</option>
+
+					<option value="CLAIM_INTERNAL">
+						CLAIM
+					</option>
+
+				</select>
+
+			</div>
+
+			<div class="action-row">
+
+				<button
+					class="action-btn edit-btn"
+					id="editBtn"
+				>
+					EDIT
+				</button>
+
+				<button
+					class="action-btn delete-btn"
+				>
+					DELETE
+				</button>
+
+			</div>
+
+		</div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+
+							<input
+								type="checkbox"
+								id="selectAll"
+							>
+
+						</th>
+                        <th>RESI</th>
+                        <th>SELLER</th>
+                        <th>TANGGAL</th>
+                        <th>TYPE</th>
+                        <th>NOMINAL</th>
+                        <th>DETAIL</th>
+
+                    </tr>
+
+                </thead>
+				
+				<tbody id="tableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+	
+	<div
+    id="pagination"
+    style="
+        margin-top:18px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+    "
+></div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+
+let currentType = "COMPLAINT";
+
+const complaintBtn =
+    document.getElementById("complaintBtn");
+
+const claimBtn =
+    document.getElementById("claimBtn");
+
+const nominalWrap =
+    document.getElementById("nominalWrap");
+
+complaintBtn.onclick = ()=>{
+
+    currentType = "COMPLAINT";
+
+    complaintBtn.classList.add("active");
+
+    claimBtn.classList.remove("active");
+
+    nominalWrap.style.display = "none";
+
+}
+
+claimBtn.onclick = ()=>{
+
+    currentType = "CLAIM_INTERNAL";
+
+    claimBtn.classList.add("active");
+
+    complaintBtn.classList.remove("active");
+
+    nominalWrap.style.display = "block";
+
+}
+
+const saveBtn =
+    document.getElementById("saveBtn");
+
+const tableBody =
+    document.getElementById("tableBody");
+
+let editId = null;
+
+let currentPage = 1;
+
+function showToast(text){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+    toast.innerText = text;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+    window.toastTimer =
+        setTimeout(()=>{
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },2200);
+
+}
+
+/* LOAD TABLE */
+
+async function loadTable(){
+
+    const search =
+		document
+		.getElementById("searchInput")
+		.value;
+
+	const type =
+		document
+		.getElementById("filterType")
+		.value;
+
+	const res = await fetch(
+
+	`/manual_list?search=${
+		encodeURIComponent(search)
+	}&type=${
+		type
+	}&page=${
+		currentPage
+	}`
+
+	);
+
+    const result =
+		await res.json();
+
+	const data =
+		result.data;
+
+    tableBody.innerHTML = "";
+
+    data.forEach(item=>{
+
+        tableBody.innerHTML += `
+
+        <tr>
+
+            <td>
+
+				<input
+					type="checkbox"
+					class="row-check"
+					value="${item.id}"
+
+					data-item='${JSON.stringify(item)}'
+
+				>
+
+			</td>
+
+            <td>${item.resi || "-"}</td>
+
+            <td>${item.seller || "-"}</td>
+
+            <td>${item.tanggal || "-"}</td>
+
+            <td>
+
+                ${
+                    item.type === "CLAIM_INTERNAL"
+
+					? `
+
+					<span class="badge badge-claim">
+						CLAIM
+					</span>
+
+					`
+
+					: `
+
+					<span class="badge badge-complaint">
+						COMPLAINT
+					</span>
+
+					`
+                }
+
+            </td>
+
+            <td>
+
+                ${
+                    item.nominal
+                    ? "Rp " + Number(item.nominal)
+                        .toLocaleString("id-ID")
+                    : "-"
+                }
+
+            </td>
+
+            <td>
+
+                <button
+                    class="detail-btn"
+                    onclick="showDetail(
+                        '${item.photo}',
+                        \`${item.keterangan || "-"}\`
+                    )"
+                >
+                    DETAIL
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+	
+	renderPagination(
+    result.pagination
+);
+
+}
+
+/* SAVE */
+
+saveBtn.onclick = async ()=>{
+
+	saveBtn.disabled = true;
+
+	saveBtn.innerText =
+		"Saving...";
+
+	const resi =
+		document
+		.getElementById("resi")
+		.value
+		.trim();
+
+	const seller =
+		document
+		.getElementById("seller")
+		.value
+		.trim();
+
+	const nominal =
+		document
+		.getElementById("nominal")
+		.value
+		.trim();
+
+	if(!resi){
+
+		showToast(
+			"Resi wajib diisi"
+		);
+
+		return;
+
+	}
+
+	if(!seller){
+
+		showToast(
+			"Seller wajib diisi"
+		);
+
+		return;
+
+	}
+
+	if(
+		currentType ===
+		"CLAIM_INTERNAL"
+
+		&&
+
+		!nominal
+	){
+
+		showToast(
+			"Nominal wajib diisi"
+		);
+
+		return;
+
+	}
+
+    const formData = new FormData();
+	
+	if(editId){
+
+		formData.append(
+			"id",
+			editId
+		);
+
+	}
+
+    formData.append(
+        "type",
+        currentType
+    );
+
+    formData.append(
+        "resi",
+        document
+            .getElementById("resi")
+            .value
+    );
+
+    formData.append(
+        "seller",
+        document
+            .getElementById("seller")
+            .value
+    );
+
+    formData.append(
+        "tanggal",
+        document
+            .getElementById("tanggal")
+            .value
+    );
+
+    formData.append(
+        "nominal",
+        document
+            .getElementById("nominal")
+            .value
+    );
+
+    formData.append(
+        "keterangan",
+        document
+            .getElementById("keterangan")
+            .value
+    );
+
+    const photo =
+        document
+            .getElementById("photo")
+            .files[0];
+
+    if(photo){
+
+        formData.append(
+            "photo",
+            photo
+        );
+
+    }
+
+    const res = await fetch(
+
+        editId
+		? "/manual_update"
+		: "/manual_add",
+
+        {
+            method:"POST",
+            body:formData
+        }
+
+    );
+
+    const result =
+        await res.json();
+
+    if(result.success){
+
+        showToast(
+			"Data berhasil disimpan"
+		);
+
+        clearForm();
+		
+		editId = null;
+
+		saveBtn.innerText =
+			"SAVE DATA";
+
+        loadTable();
+		
+		saveBtn.disabled = false;
+
+		saveBtn.innerText =
+			"SAVE DATA";
+
+    }else{
+
+        showToast(
+			result.error || "Gagal"
+		);
+
+    }
+
+};
+
+/* CLEAR FORM */
+
+function clearForm(){
+
+    document
+        .getElementById("resi")
+        .value = "";
+
+    document
+        .getElementById("seller")
+        .value = "";
+
+    document
+        .getElementById("tanggal")
+        .value = "";
+
+    document
+        .getElementById("nominal")
+        .value = "";
+
+    document
+        .getElementById("photo")
+        .value = "";
+
+    document
+        .getElementById("keterangan")
+        .value = "";
+
+}
+
+/* DELETE */
+
+async function deleteSelected(){
+
+    const ids = [];
+
+    document
+    .querySelectorAll(".row-check:checked")
+    .forEach(el=>{
+
+        ids.push(el.value);
+
+    });
+
+    if(ids.length < 1){
+
+        showToast(
+			"Pilih data dulu"
+		);
+
+        return;
+
+    }
+
+    if(!confirm("Hapus data terpilih?")){
+
+        return;
+
+    }
+
+    const res = await fetch(
+
+        "/manual_delete",
+
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+                ids
+            })
+
+        }
+
+    );
+
+    const result =
+        await res.json();
+
+    if(result.success){
+
+        showToast(
+			"Data berhasil dihapus"
+		);
+		
+		loadTable();
+
+    }
+
+}
+
+/* DETAIL POPUP */
+
+function showDetail(photo, text){
+
+    let imageHtml = "";
+
+    if(photo){
+
+        imageHtml = `
+
+        <img
+            src="/static/manual_upload/${photo}"
+            style="
+                width:100%;
+                border-radius:16px;
+                margin-bottom:14px;
+            "
+        >
+
+        `;
+
+    }
+
+    const popup = document.createElement("div");
+
+    popup.style = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.6);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:9999;
+        padding:20px;
+    `;
+
+    popup.innerHTML = `
+
+    <div
+        style="
+            width:100%;
+            max-width:520px;
+            background:white;
+            border-radius:28px;
+            padding:22px;
+        "
+    >
+
+        ${imageHtml}
+
+        <div
+            style="
+                font-size:14px;
+                line-height:1.7;
+                color:#333;
+            "
+        >
+
+            ${text}
+
+        </div>
+
+        <button
+            onclick="this.parentElement.parentElement.remove()"
+            style="
+                margin-top:18px;
+                width:100%;
+                height:46px;
+                border:none;
+                border-radius:14px;
+                background:#111;
+                color:white;
+                font-weight:700;
+                cursor:pointer;
+            "
+        >
+            CLOSE
+        </button>
+
+    </div>
+
+    `;
+
+    document.body.appendChild(popup);
+
+}
+
+/* DELETE BTN */
+
+document
+.querySelector(".delete-btn")
+.onclick = deleteSelected;
+
+document
+.getElementById("editBtn")
+.onclick = ()=>{
+
+    const checked = [
+        ...document.querySelectorAll(
+            ".row-check:checked"
+        )
+    ];
+
+    if(checked.length !== 1){
+
+        showToast(
+			"Pilih 1 data untuk edit"
+		);
+
+        return;
+
+    }
+
+    const item = JSON.parse(
+        checked[0]
+        .dataset
+        .item
+    );
+
+    editId = item.id;
+
+    document
+        .getElementById("resi")
+        .value =
+        item.resi || "";
+
+    document
+        .getElementById("seller")
+        .value =
+        item.seller || "";
+
+    document
+        .getElementById("tanggal")
+        .value =
+        item.tanggal || "";
+
+    document
+        .getElementById("nominal")
+        .value =
+        item.nominal || "";
+
+    document
+        .getElementById("keterangan")
+        .value =
+        item.keterangan || "";
+
+    if(
+        item.type ===
+        "CLAIM_INTERNAL"
+    ){
+
+        claimBtn.click();
+
+    }else{
+
+        complaintBtn.click();
+
+    }
+
+    saveBtn.innerText =
+        "UPDATE DATA";
+
+    window.scrollTo({
+
+        top:0,
+        behavior:"smooth"
+
+    });
+
+};
+
+document
+.getElementById("searchInput")
+.addEventListener(
+
+    "input",
+
+    ()=>{
+
+        currentPage = 1;
+
+		loadTable();
+
+    }
+
+);
+
+document
+.getElementById("filterType")
+.addEventListener(
+
+    "change",
+
+    ()=>{
+
+        currentPage = 1;
+
+		loadTable();
+
+    }
+
+);
+
+function renderPagination(pg){
+
+    const el =
+        document.getElementById(
+            "pagination"
+        );
+
+    el.innerHTML = `
+
+    <button
+        onclick="changePage(-1)"
+        ${
+            pg.page <= 1
+            ? "disabled"
+            : ""
+        }
+    >
+        Prev
+    </button>
+
+    <div>
+        Page ${pg.page}
+        / ${pg.total_pages}
+    </div>
+
+    <button
+        onclick="changePage(1)"
+        ${
+            pg.page >= pg.total_pages
+            ? "disabled"
+            : ""
+        }
+    >
+        Next
+    </button>
+
+    `;
+
+}
+
+function changePage(step){
+
+    currentPage += step;
+
+    if(currentPage < 1){
+
+        currentPage = 1;
+
+    }
+
+    loadTable();
+
+}
+
+document
+.getElementById("selectAll")
+.addEventListener(
+
+    "change",
+
+    function(){
+
+        document
+        .querySelectorAll(".row-check")
+        .forEach(el=>{
+
+            el.checked =
+                this.checked;
+
+        });
+
+    }
+
+);
+
+document
+.getElementById("tanggal")
+.value = new Date()
+.toISOString()
+.split("T")[0];
+
+/* INIT */
+
+loadTable();
+
+</script>
+
+    <script src="{{ url_for('static', filename='js/account_message_popup.js', v='20260701-account-message-1') }}"></script>
+</body>
+</html>

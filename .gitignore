@@ -1,0 +1,78 @@
+# Secrets and environment
+.env
+*.env
+!*.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+headers.json
+ha_state.json
+.flask_secret
+*credential*.json
+*credentials*.json
+cert.pem
+
+# Databases, dumps, and user data
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sql
+*.sql.gz
+*.dump
+*.bak
+scanner.db*
+bulk_staging/
+bulk_upload/
+scan_outbox/
+vps_migration/
+
+# Captured sessions and exports
+*.har
+*.xlsx
+*.xls
+*.csv
+*.log
+
+# Runtime uploads and personal attendance photos
+static/uploads/
+static/manual_upload/
+static/message_uploads/
+static/retur_photo/
+
+# Python caches and packaging
+__pycache__/
+*.py[cod]
+*.spec.bak
+.venv/
+venv/
+output/
+dist/
+build/
+
+# Server installer contains private credentials
+server_packages/
+
+# Android generated files and bundled SDK/tool archives
+android_attendance/.android-sdk/
+android_attendance/.gradle/
+android_attendance/gradle-*/
+android_attendance/*.zip
+android_attendance/local.properties
+android_attendance/**/build/
+*.apk
+*.aab
+
+# IDE and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local backups and temporary copies
+*.backup*
+*.before_*
+*.pool_v*
+*~
